@@ -96,6 +96,10 @@
                                     echo "";
                                     break;
 
+                                    case '7':
+                                      echo "";
+                                      break;
+
                                   default:
                                     echo "nav-item d-none d-sm-inline-block";
                                     break;
@@ -123,6 +127,10 @@
                                   case '6':
                                     echo "";
                                     break;
+
+                                    case '7':
+                                      echo "";
+                                      break;
 
                                   default:
                                     echo "nav-item d-none d-sm-inline-block";
@@ -153,6 +161,10 @@
                                     echo "";
                                     break;
 
+                                    case '7':
+                                      echo "";
+                                      break;
+
                                   default:
                                     echo "nav-item d-none d-sm-inline-block";
                                     break;
@@ -181,6 +193,10 @@
                                   case '6':
                                     echo "";
                                     break;
+
+                                    case '7':
+                                      echo "";
+                                      break;
 
                                   default:
                                     echo "nav-item d-none d-sm-inline-block";
@@ -211,6 +227,11 @@
                                     echo "";
                                     break;
 
+
+                                    case '7':
+                                      echo "";
+                                      break;
+
                                   default:
                                     echo "nav-item d-none d-sm-inline-block";
                                     break;
@@ -238,6 +259,10 @@
                                   case '6':
                                     echo "";
                                     break;
+
+                                    case '7':
+                                      echo "";
+                                      break;
 
                                   default:
                                     echo "nav-item d-none d-sm-inline-block";
@@ -267,6 +292,10 @@
                                   case '6':
                                     echo "";
                                     break;
+
+                                    case '7':
+                                      echo "";
+                                      break;
 
                                   default:
                                     echo "nav-item d-none d-sm-inline-block";

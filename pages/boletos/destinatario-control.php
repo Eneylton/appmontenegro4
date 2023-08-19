@@ -33,6 +33,7 @@ $param = filter_input(INPUT_GET, "id", FILTER_SANITIZE_NUMBER_INT);
 $detalhe = EntregadorDetalhe::getIDDetalheList('ed.id AS id,
 ed.data AS data,
 ed.status AS status,
+u.nome as usuario,
 ed.obs AS obs,
 ed.ocorrencias_id AS ocorrencias_id,
 ed.entregadores_id AS entregadores_id,
@@ -44,7 +45,9 @@ o.nome as ocorrencias', 'entregador_detalhe AS ed
 INNER JOIN
 entregadores AS e ON (ed.entregadores_id = e.id)
 INNER JOIN
-ocorrencias AS o ON (ed.ocorrencias_id = o.id)', $param, null, null, null);
+ocorrencias AS o ON (ed.ocorrencias_id = o.id)
+INNER JOIN
+usuarios AS u ON (ed.usuarios_id = u.id)', $param, null, null, null);
 
 foreach ($detalhe as $item) {
 
@@ -86,7 +89,7 @@ foreach ($detalhe as $item) {
     <div class="timeline">
   
     <div class="time-label">
-    <span class="bg-info" style="padding:10px">' . date('d/m/Y -- H:i:s', strtotime($item->data)) . '</span>
+    <span class="bg-info" style="padding:10px">' . date('d/m/Y -- H:i:s', strtotime($item->data)) . ' | <span style="color:#5ee7ff">'.$item->usuario.'</span></span>
     </div>
   
     <div>

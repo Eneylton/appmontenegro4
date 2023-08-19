@@ -58,7 +58,7 @@ foreach ($listar as $item) {
                       <td style="text-align: center;">
                         
                       
-                      <button type="submit" class="btn btn-success editbtn" > <i class="fas fa-paint-brush"></i> </button>
+                      <button class="btn btn-info btn-sm" onclick="EditarUser(' . $item->id . ')"> <i class="fas fa-pencil-alt"></i> &nbsp; Editar</button>
                       &nbsp;
 
                        <a href="usuario-delete.php?id=' . $item->id . '">
@@ -73,8 +73,8 @@ foreach ($listar as $item) {
 }
 
 $resultados = strlen($resultados) ? $resultados : '<tr>
-                                                     <td colspan="6" class="text-center" > Nenhuma Vaga Encontrada !!!!! </td>
-                                                     </tr>';
+                                                     <td colspan="6" class="text-center" > Nenhum Usuário Encontrado !!!!! </td>
+                                                   </tr>';
 
 
 unset($_GET['status']);
@@ -180,17 +180,41 @@ foreach ($paginas as $key => $pagina) {
                </button>
             </div>
             <div class="modal-body">
+               
+               <div class="row">
+               <div class="col-6">
+
                <div class="form-group">
                   <label>Nome</label>
                   <input type="text" class="form-control" name="nome" required>
                </div>
+                  
+               </div>
+               <div class="col-6">
 
                <div class="form-group">
                   <label>Email</label>
                   <input type="email" class="form-control" name="email" required>
                </div>
 
-               <div class="row">
+               </div>
+               <div class="col-12">
+                <div class="form-group">
+                        <label>Clientes</label>
+                        <select class="form-control select" style="width: 100%;" name="clientes[]" multiple>
+                           <option value=""> Selecione os Cliente(s) </option>
+                           <?php
+
+                           foreach ($clientes as $item) {
+                              echo '<option value="' . $item->id . '">' . $item->nome . '</option>';
+                           }
+                           ?>
+
+                        </select>
+                     </div>
+
+                </div>
+               
                 <div class="col-6">
                 <div class="form-group">
                         <label>Cargos</label>
@@ -254,73 +278,33 @@ foreach ($paginas as $key => $pagina) {
 
 <!-- EDITAR -->
 
-<div class="modal fade" id="editmodal">
-   <div class="modal-dialog">
-      <form action="./usuario-edit.php" method="get">
-         <div class="modal-content bg-light">
-            <div class="modal-header">
-               <h4 class="modal-title">Editar Categoria Despesas
-               </h4>
-               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-               </button>
+<form action="./usuario-edit.php" method="get">
+    <div class="modal fade" id="editModal">
+        <div class="modal-dialog modal-lg">
+
+            <div class="modal-content bg-light">
+                <div class="modal-header">
+                    <h4 class="modal-title">Editar
+                    </h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+
+                    <span class="edit-modal"></span>
+
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
+                    <button type="submit" class="btn btn-primary">Salvar
+                    </button>
+                </div>
             </div>
-            <div class="modal-body">
-               <input type="hidden" name="id" id="id">
-               <div class="form-group">
-                  <label>Nome</label>
-                  <input type="text" class="form-control" name="nome" id="nome" required disabled>
-               </div>
-               <div class="form-group">
-                  <label>Email</label>
-                  <input type="text" class="form-control" name="email" id="email" required>
-               </div>
-               <div class="form-group">
-                        <label>Cargos</label>
-                        <select class="form-control select" style="width: 100%;" name="cargos_id" id="cargos_id">
-                           <option value=""> Selecione um cargo </option>
-                           <?php
 
-                           foreach ($cargos as $item) {
-                              echo '<option value="' . $item->id . '">' . $item->descricao . '</option>';
-                           }
-                           ?>
-
-                        </select>
-                     </div>
-
-                     <div class="form-group">
-                        <label>Nível de acesso</label>
-                        <select class="form-control select" style="width: 100%;" name="acessos_id" id="acessos_id">
-                           <option value=""> Selecione um nivel </option>
-                           <?php
-
-                           foreach ($acessos as $item) {
-                              echo '<option value="' . $item->id . '">' . $item->nivel . '</option>';
-                           }
-                           ?>
-
-                        </select>
-                     </div>
-
-               <div class="form-group">
-                  <label>Senha</label>
-                  <input type="password" placeholder="Senha" id="password" class="form-control" name="senha" required disabled>
-               </div>
-
-               <div class="form-group">
-                  <label>Confirma Senha</label>
-                  <input type="password" placeholder="Confirme Senha" id="confirm_password" class="form-control" required disabled>
-               </div>
-            </div>
-            <div class="modal-footer justify-content-between">
-               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-               <button type="submit" class="btn btn-primary">Salvar
-               </button>
-            </div>
-         </div>
-      </form>
-      <!-- /.modal-content -->
-   </div>
-   <!-- /.modal-dialog -->
-</div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+</form>

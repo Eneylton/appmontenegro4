@@ -6,6 +6,7 @@ $nome = '';
 $resultados = '';
 $block = '';
 $contador  = 0;
+$disponivel  = 0;
 $ecommerce  = 'E-commerce';
 $campo  = '';
 $desc  = '';
@@ -148,7 +149,37 @@ foreach ($listar as $item) {
     }
 
     switch ($data_final) {
-
+        
+        case '-15':
+            $cor = "badge-danger";
+            $dia = "Já se passaram 15 dias do vencimento...";
+        case '-14':
+            $cor = "badge-danger";
+            $dia = "Já se passaram 14 dias do vencimento...";
+        case '-13':
+            $cor = "badge-danger";
+            $dia = "Já se passaram 13 dias do vencimento...";
+        case '-12':
+            $cor = "badge-danger";
+            $dia = "Já se passaram 12 dias do vencimento...";
+        case '-11':
+            $cor = "badge-danger";
+            $dia = "Já se passaram 11 dias do vencimento...";
+        case '-10':
+            $cor = "badge-danger";
+            $dia = "Já se passaram 10 dias do vencimento...";
+        case '-9':
+            $cor = "badge-danger";
+            $dia = "Já se passaram 9 dias do vencimento...";
+        case '-8':
+            $cor = "badge-danger";
+            $dia = "Já se passaram 8 dias do vencimento...";
+        case '->7':
+            $cor = "badge-danger";
+            $dia = "Já se passaram 7 dias do vencimento...";
+        case '-6':
+            $cor = "badge-danger";
+            $dia = "Já se passaram 6 dias do vencimento...";
         case '-5':
             $cor = "badge-danger";
             $dia = "Já se passaram 5 dias do vencimento...";
@@ -206,6 +237,13 @@ foreach ($listar as $item) {
             $cor = "badge-dark";
             $dia = "SEM PREVISÃO !!!!";
             break;
+    }
+
+    $flag = intval($item->disponivel);
+
+    if( $flag == 0){
+        $cor = "badge-success";
+        $dia = "Concluido...";
     }
 
     if ($item->coleta == null) {

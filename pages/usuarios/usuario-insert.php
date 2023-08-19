@@ -5,6 +5,7 @@ require __DIR__.'../../../vendor/autoload.php';
 define('TITLE','Novo Usuário');
 define('BRAND','Cadastrar Usuário');
 
+use App\Entidy\UserCli;
 use App\Entidy\Usuario;
 use App\Session\Login;
 
@@ -26,20 +27,31 @@ if(isset($_POST['nome'],$_POST['email'],$_POST['senha'])){
         
     }else{
 
-        $userEmail = new Usuario;
-        $userEmail->nome = $_POST['nome'];
-        $userEmail->email = $_POST['email'];
-        $userEmail->cargos_id = $_POST['cargos_id'];
-        $userEmail->acessos_id = $_POST['acessos_id'];
-        $userEmail->senha = password_hash($_POST['senha'], PASSWORD_DEFAULT);
+        $user = new Usuario;
+        $user->nome = $_POST['nome'];
+        $user->email = $_POST['email'];
+        $user->cargos_id = $_POST['cargos_id'];
+        $user->acessos_id = $_POST['acessos_id'];
+        $user->senha = password_hash($_POST['senha'], PASSWORD_DEFAULT);
     
-        $userEmail->cadastar();
+        $user->cadastar();
+
+        $id = $user->id;
+
+        
+if (isset($_POST['clientes'])) {
+
+    foreach ($_POST['clientes'] as $key) {
+        
+        $usercli = new UserCli;
+        $usercli->usuarios_id = $id;
+        $usercli->clientes_id = $key;
+        $usercli->cadastar();
+    }
+}
 
         header('location: usuario-list.php?status=success');
         exit;
     }
   
-   
-
-
 } 

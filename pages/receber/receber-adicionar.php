@@ -119,6 +119,7 @@ if (isset($_POST['adicionar'])) {
 
             $item2 = new Boleto;
             $item2->data            = $data_importacao;
+            $item2->sequencia       = 1;
             $item2->coleta          = $data_coleta;
             $item2->data_inicio     = $inicio;
             $item2->data_fim        = $fim;
@@ -141,12 +142,13 @@ if (isset($_POST['adicionar'])) {
             $id_boleto = $item2->id;
 
             $detalhe = new EntregadorDetalhe;
-            $detalhe->data  = $data_importacao;
-            $detalhe->status  = 2;
-            $detalhe->obs  = "Nenhuma ...";
-            $detalhe->ocorrencias_id   = 18;
-            $detalhe->entregadores_id  = $_POST['entregador_id'];
-            $detalhe->boletos_id       = $id_boleto;
+            $detalhe->data                = $data_importacao;
+            $detalhe->status              = 2;
+            $detalhe->obs                 = "Nenhuma ...";
+            $detalhe->ocorrencias_id      = 18;
+            $detalhe->entregadores_id     = $_POST['entregador_id'];
+            $detalhe->boletos_id          = $id_boleto;
+            $detalhe->usuarios_id         = $usuario;
             $detalhe->cadastar();
 
             header('location: ../receber/entregador-boleto.php?entregador_id=' . $_POST['entregador_id'] . '&receber_id=' . $_POST['receber_id'] . '&qtd=' . $_POST['qtd']);

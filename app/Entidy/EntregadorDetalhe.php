@@ -16,6 +16,7 @@ class EntregadorDetalhe
     public $ocorrencias_id;
     public $entregadores_id;
     public $boletos_id;
+    public $usuarios_id;
 
     public function cadastar()
     {
@@ -31,7 +32,8 @@ class EntregadorDetalhe
             'obs'                  => $this->obs,
             'ocorrencias_id'       => $this->ocorrencias_id,
             'entregadores_id'      => $this->entregadores_id,
-            'boletos_id'      => $this->boletos_id
+            'usuarios_id'          => $this->usuarios_id,
+            'boletos_id'           => $this->boletos_id
 
         ]);
 
@@ -48,7 +50,9 @@ class EntregadorDetalhe
             'obs'                  => $this->obs,
             'ocorrencias_id'       => $this->ocorrencias_id,
             'entregadores_id'      => $this->entregadores_id,
-            'boletos_id'      => $this->boletos_id
+            'usuarios_id'          => $this->usuarios_id,
+            'boletos_id'           => $this->boletos_id
+            
         ]);
     }
 

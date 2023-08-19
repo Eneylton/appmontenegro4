@@ -66,6 +66,25 @@ class Usuario
             ->qtd;
     }
 
+    public static function getID($fields, $table, $where, $order, $limit)
+    {
+        return (new Database('usuarios'))->select($fields, $table, 'id = ' . $where, $order, $limit)
+            ->fetchObject(self::class);
+    }
+
+    public static function getIDCargo($fields, $table, $where, $order, $limit)
+    {
+        return (new Database('usuarios'))->select($fields, $table, 'cargos_id = ' . $where, $order, $limit)
+            ->fetchObject(self::class);
+    }
+
+
+    public static function getIDAcessos($fields, $table, $where, $order, $limit)
+    {
+        return (new Database('usuarios'))->select($fields, $table, 'acessos_id = ' . $where, $order, $limit)
+            ->fetchObject(self::class);
+    }
+
 
     public static function getUsuariosID($id)
     {

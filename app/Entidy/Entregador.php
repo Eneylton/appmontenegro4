@@ -8,8 +8,6 @@ use \PDO;
 
 class Entregador
 {
-
-
     public $id;
     public $nome;
     public $telefone;

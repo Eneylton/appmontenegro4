@@ -81,7 +81,7 @@ if ($_GET['entregadores_id'] != 0) {
     }
 
 
-    $listar = Boleto::getList('b.id,
+    $listar = Boleto::getList('b.id,b.data_fim as vencimento,
     b.nota,
     b.sequencia,
     b.codigo,
@@ -134,7 +134,7 @@ if ($_GET['entregadores_id'] != 0) {
         }
     }
 
-    $listar = Boleto::getList('b.id,
+    $listar = Boleto::getList('b.id,b.data_fim as vencimento,
     b.nota,
     b.sequencia,
     b.codigo,
@@ -171,7 +171,7 @@ if ($_GET['entregadores_id'] != 0) {
 
     $nome_entregador = "RELATÓRIO GERAL DE ENTREGADORES...";
 
-    $listar = Boleto::getList('b.id,
+    $listar = Boleto::getList('b.id,b.data_fim as vencimento,
     b.nota,
     b.sequencia,
     b.codigo,
@@ -218,15 +218,18 @@ foreach ($listar as $item) {
     if ($item->status == 1) {
 
         $cores = '<span style="color:green"> ENTREGUE</span>';
+    } else if ($item->status == 2) {
+
+        $cores = '<span style="color:#ff0000"> DEVOLVIDO</span>';
     } else if ($item->status == 3) {
 
-        $cores = '<span style="color:#e3a800"> AGUARDANDO</span';
+        $cores = '<span style="color:#e3a800"> AGUARDANDO</span>';
     } else if ($item->status == 4) {
 
-        $cores = '<span style="color:#ff0000"> PENDENTE</span';
+        $cores = '<span style="color:#0c77b1">EM ROTA</span>';
     } else {
 
-        $cores = '<span style="color:#ff0000"> DEVOLUÇÃO</span';
+        $cores = '<span style="color:#e3a800"> --- </span>';
     }
 
     if ($item->obs == "") {

@@ -14,6 +14,10 @@ use App\Session\Login;
 
 Login::requireLogin();
 
+$usuariologado = Login::getUsuarioLogado();
+
+$usuario = $usuariologado['id'];
+
 $flag = "";
 
 date_default_timezone_set('America/Sao_Paulo');
@@ -41,12 +45,13 @@ if (!isset($_GET['id']) or !is_numeric($_GET['id'])) {
             $value->atualizar();
 
             $detalhe = new EntregadorDetalhe;
-            $detalhe->data  = $data_cadastra;
-            $detalhe->status  = 5;
+            $detalhe->data             = $data_cadastra;
+            $detalhe->status           = 5;
             $detalhe->ocorrencias_id   = 29;
-            $detalhe->obs  = $_GET['obs'];
+            $detalhe->obs              = $_GET['obs'];
             $detalhe->entregadores_id  = $_GET['entregador_id'];
-            $detalhe->boletos_id  = $_GET['id']; 
+            $detalhe->boletos_id       = $_GET['id']; 
+            $detalhe->usuarios_id      = $usuario; 
             $detalhe->cadastar();
 
             header('location: boleto-list.php?id_item=' . $_GET['receber_id']);
@@ -56,12 +61,13 @@ if (!isset($_GET['id']) or !is_numeric($_GET['id'])) {
             case '4':
 
             $detalhe = new EntregadorDetalhe;
-            $detalhe->data  = $data_cadastra;
-            $detalhe->status  = 2;
-            $detalhe->ocorrencias_id   = 29;
-            $detalhe->obs  = $_GET['obs'];
-            $detalhe->entregadores_id  = $_GET['entregador_id'];
-            $detalhe->boletos_id  = $_GET['id']; 
+            $detalhe->data                = $data_cadastra;
+            $detalhe->status              = 2;
+            $detalhe->ocorrencias_id      = 29;
+            $detalhe->obs                 = $_GET['obs'];
+            $detalhe->entregadores_id     = $_GET['entregador_id'];
+            $detalhe->boletos_id          = $_GET['id']; 
+            $detalhe->usuarios_id         = $usuario; 
             $detalhe->cadastar();
            
             $value = Boleto::getID('*', 'boletos', $_GET['id'], null, null, null);
@@ -77,12 +83,13 @@ if (!isset($_GET['id']) or !is_numeric($_GET['id'])) {
         case '1':
             
             $detalhe = new EntregadorDetalhe;
-            $detalhe->data  = $data_cadastra;
-            $detalhe->status  = 3;
+            $detalhe->data             = $data_cadastra;
+            $detalhe->status           = 3;
             $detalhe->ocorrencias_id   = 29;
-            $detalhe->obs  = $_GET['obs'];
+            $detalhe->obs              = $_GET['obs'];
             $detalhe->entregadores_id  = $_GET['entregador_id'];
-            $detalhe->boletos_id  = $_GET['id'];
+            $detalhe->boletos_id       = $_GET['id'];
+            $detalhe->usuarios_id      = $usuario; 
             $detalhe->cadastar();
 
             $producao = Producao::getReceberID('*', 'producao', $_GET['receber_id'] . ' AND entregadores_id = ' . $_GET['entregador_id'], null, null, null);
@@ -161,6 +168,7 @@ if (!isset($_GET['id']) or !is_numeric($_GET['id'])) {
             $detalhe->obs                   = $_GET['obs'];
             $detalhe->entregadores_id       = $_GET['entregador_id'];
             $detalhe->boletos_id            = $_GET['id'];
+            $detalhe->usuarios_id           = $usuario; 
             $detalhe->cadastar();
 
             $producao = Producao::getReceberID('*', 'producao', $_GET['receber_id'] . ' AND entregadores_id = ' . $_GET['entregador_id'], null, null, null);

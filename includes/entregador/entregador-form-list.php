@@ -101,9 +101,7 @@ foreach ($listar as $item) {
                       &nbsp;
                        <a href="entregador-delete.php?id=' . $item->id . '">
                        <button type="button" class="btn btn-danger btn-sm"> <i class="far fa-trash-alt"></i> &nbsp; Excluir</button>
-                       </a>
-                   
-                   
+                       </a>                   
                       </td>
                       </tr>
                       ';

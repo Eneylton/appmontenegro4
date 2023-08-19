@@ -92,6 +92,10 @@ $usuario = $usuariologado ?
                         echo "";
                         break;
 
+                      case '7':
+                        echo "";
+                        break;
+
                       default:
                         echo "nav-item d-none d-sm-inline-block";
                         break;
@@ -121,6 +125,10 @@ $usuario = $usuariologado ?
                         echo "";
                         break;
 
+                        case '7':
+                          echo "";
+                          break;
+
                       default:
                         echo "nav-item d-none d-sm-inline-block";
                         break;
@@ -148,6 +156,10 @@ $usuario = $usuariologado ?
                       case '6':
                         echo "";
                         break;
+
+                        case '7':
+                          echo "";
+                          break;
 
                       default:
                         echo "nav-item d-none d-sm-inline-block";
@@ -178,6 +190,10 @@ $usuario = $usuariologado ?
                         echo "";
                         break;
 
+                        case '7':
+                          echo "";
+                          break;
+
                       default:
                         echo "nav-item d-none d-sm-inline-block";
                         break;
@@ -206,6 +222,10 @@ $usuario = $usuariologado ?
                       case '6':
                         echo "";
                         break;
+
+                        case '7':
+                          echo "";
+                          break;
 
                       default:
                         echo "nav-item d-none d-sm-inline-block";
@@ -236,6 +256,10 @@ $usuario = $usuariologado ?
                         echo "";
                         break;
 
+                        case '7':
+                          echo "";
+                          break;
+
                       default:
                         echo "nav-item d-none d-sm-inline-block";
                         break;
@@ -265,6 +289,10 @@ $usuario = $usuariologado ?
                       case '6':
                         echo "";
                         break;
+
+                        case '7':
+                          echo "";
+                          break;
 
                       default:
                         echo "nav-item d-none d-sm-inline-block";
