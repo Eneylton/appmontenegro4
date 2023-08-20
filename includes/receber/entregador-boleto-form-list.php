@@ -130,26 +130,21 @@ if (isset($_GET['entregador_id'])) {
                 <div class="card back-black">
                     <div class="card-header">
                         <a href="../receber/receber-item-cadastro.php?id_item=<?= $id ?>&qtd=<?= $qtd_id  ?>">
-                            <button accesskey="q" title="ALT+K" type="button" class="btn btn-warning"
-                                data-toggle="modal" data-target="#modal-default"> <i style="font-size: 27px;"
-                                    class="fa fa-arrow-circle-left" aria-hidden="true"></i> &nbsp;
+                            <button accesskey="q" title="ALT+K" type="button" class="btn btn-warning" data-toggle="modal" data-target="#modal-default"> <i style="font-size: 27px;" class="fa fa-arrow-circle-left" aria-hidden="true"></i> &nbsp;
                                 <span style="font-size: 27px;">VOLTAR</span></button>
                         </a>
                         &nbsp;
                         &nbsp;
                         &nbsp;
                         <a href="../producao/producao-list.php">
-                            <button accesskey="p" title="ALT+P" type="submit" class="btn btn-danger float-right"
-                                <?= $disabled ?> data-toggle="modal" data-target="#modal-default"> <i
-                                    style="font-size: 27px;" class="fa fa-truck" aria-hidden="true"></i> &nbsp;
+                            <button accesskey="p" title="ALT+P" type="submit" class="btn btn-danger float-right" <?= $disabled ?> data-toggle="modal" data-target="#modal-default"> <i style="font-size: 27px;" class="fa fa-truck" aria-hidden="true"></i> &nbsp;
                                 <span style="font-size: 27px;">TOTAL:
                                     <?= isset($qtd_id) ? $qtd_id  : null ?> </span></button>
                         </a>
                     </div>
                     <!-- /.card-header -->
 
-                    <form id="form" action="../receber/receber-adicionar.php" method="post"
-                        enctype="multipart/form-data">
+                    <form id="form" action="../receber/receber-adicionar.php" method="post" enctype="multipart/form-data">
                         <input type="hidden" value="<?= $id ?>" name="receber_id">
                         <input type="hidden" value="<?= $param ?>" name="entregador_id">
                         <input type="hidden" value="<?= $qtd  ?>" name="qtd">
@@ -163,30 +158,26 @@ if (isset($_GET['entregador_id'])) {
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label>Data da Coleta: </label>
-                                        <input disabled value="<?= $data ?>" type="datetime-local" class="form-control"
-                                            name="data">
+                                        <input disabled value="<?= $data ?>" type="datetime-local" class="form-control" name="data">
                                     </div>
                                 </div>
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label>Prazo de Entrega: </label>
-                                        <input disabled value="<?= $vencimento ?>" type="datetime-local"
-                                            class="form-control" name="vencimento">
+                                        <input disabled value="<?= $vencimento ?>" type="datetime-local" class="form-control" name="vencimento">
                                     </div>
                                 </div>
                                 <div class="col-12">
                                     <div class="form-group">
                                         <label>Referência</label>
-                                        <input disabled type="text" class="form-control" name="numero"
-                                            value="<?= $numero ?>" required>
+                                        <input disabled type="text" class="form-control" name="numero" value="<?= $numero ?>" required>
                                     </div>
                                 </div>
 
                                 <div class="col-12">
                                     <div class="form-group">
                                         <label>Clientes</label>
-                                        <select disabled class="form-control select" style="width: 100%;"
-                                            name="clientes_id" required>
+                                        <select disabled class="form-control select" style="width: 100%;" name="clientes_id" required>
                                             <option value="">Selecione</option>
 
                                             <?= $select_cli ?>
@@ -198,8 +189,7 @@ if (isset($_GET['entregador_id'])) {
                                     <div class="form-group">
                                         <label><span style="color:#ff0000">Código de Barras</span></label>
 
-                                        <input id="codbarra2" class="form-control" type="text" name="codbarra2"
-                                            maxlength="44" autofocus>
+                                        <input id="codbarra2" class="form-control" type="text" name="codbarra2" maxlength="44" autofocus>
                                     </div>
                                 </div>
 

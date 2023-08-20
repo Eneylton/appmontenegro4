@@ -142,6 +142,13 @@ class Boleto
             ->fetchObject(self::class);
     }
 
+    public static function getContar($fields = null, $table = null, $where = null, $group = null, $order = null, $limit = null)
+    {
+
+        return (new Database('boletos'))->select($fields, $table, $where, $group, $order, $limit)
+            ->fetchObject(self::class);
+    }
+
 
     public static function getID($fields, $table, $where, $order, $limit)
     {

@@ -16,6 +16,10 @@ $usuariologado = Login::getUsuarioLogado();
 
 $usuario = $usuariologado['id'];
 
+date_default_timezone_set('America/Sao_Paulo');
+
+$data = date('Y-m-d H:i:s');
+
 $comparar = "COD_CONTRATO ";
 
 $id_gaiola = 117;
@@ -42,25 +46,51 @@ $codigo2 = 0;
 
 if (isset($_POST['adicionar'])) {
 
-    $caracter = strlen($_POST['codbarra2']);
+    $boletoEdit = Boleto::getCodigo('*', 'boletos', "'" . $_POST['codbarra2'] . "'", null, null, null);
 
-    $restrito = NotaFiscal::getRestrito($caracter);
+    $id_boleto =  $boletoEdit->id;
 
-    if ($restrito != true) {
+    $status = $boletoEdit->status;
 
-        header('location: ../receber/entregador-boleto.php?entregador_id=' . $_POST['entregador_id'] . '&receber_id=' . $_POST['receber_id'] . '&qtd=' . $_POST['qtd'] . '&ref');
+    if ($status == 3) {
+
+        $contarSequencia = Boleto::getContar('sequencia', 'boletos', 'receber_id= ' . $_POST['receber_id']);
+
+        $sequencia = $contarSequencia->sequencia;
+
+        $boletoEdit->status = 4;
+
+        $conta = intval($sequencia + 1);
+
+        $boletoEdit->entregadores_id = $_POST['entregador_id'];
+
+        $boletoEdit->sequencia = $conta;
+        $boletoEdit->coleta = $data;
+
+        $boletoEdit->atualizar();
+
+        $detalhe = new EntregadorDetalhe;
+        $detalhe->data                = $data;
+        $detalhe->status              = 2;
+        $detalhe->obs                 = "Nenhuma ...";
+        $detalhe->ocorrencias_id      = 18;
+        $detalhe->entregadores_id     = $_POST['entregador_id'];
+        $detalhe->boletos_id          = $id_boleto;
+        $detalhe->usuarios_id         = $usuario;
+        $detalhe->cadastar();
+
+
+        header('location: ../receber/entregador-boleto.php?entregador_id=' . $_POST['entregador_id'] . '&receber_id=' . $_POST['receber_id'] . '&qtd=' . $_POST['qtd']);
         exit;
     }
-
-    $boletoEdit = Boleto::getCodigo('*', 'boletos', "'" . $_POST['codbarra2'] . "'", null, null, null);
 
     if ($boletoEdit != false) {
 
         $boletoEdit->entregadores_id = $_POST['entregador_id'];
-        $boletoEdit->coleta = $_POST['data'];
+        $boletoEdit->coleta = $data;
         $boletoEdit->atualizar();
 
-        header('location: ../receber/entregador-boleto.php?entregador_id=' . $_POST['entregador_id'] . '&receber_id=' . $_POST['receber_id'] . '&qtd=' . $_POST['qtd'] . '&status=' . $boletoEdit->status);
+        header('location: ../receber/entregador-boleto.php?entregador_id=' . $_POST['entregador_id'] . '&receber_id=' . $_POST['receber_id'] . '&qtd=' . $_POST['qtd']);
         exit;
     } else {
 

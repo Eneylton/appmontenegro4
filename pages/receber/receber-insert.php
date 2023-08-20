@@ -3,10 +3,6 @@
 require __DIR__ . '../../../vendor/autoload.php';
 
 use App\Entidy\Boleto;
-use App\Entidy\Cliente;
-use App\Entidy\Destinatario;
-use App\Entidy\EntregadorDetalhe;
-use App\Entidy\NotaFiscal;
 use App\Entidy\Receber;
 use App\Session\Login;
 
@@ -114,14 +110,6 @@ if ($arquivos != false) {
                 $item2->data            = $_POST['data'];
                 $item2->vencimento      = $_POST['vencimento'];
                 $item2->codigo          = $codigo;
-                $item2->destinatario    = $destinatario;
-                $item2->numero          = $numero;
-                $item2->endereco        = $endereco2;
-                $item2->logradouro      = $logradouro2;
-                $item2->bairro          = $bairro;
-                $item2->municipio       = $municipio;
-                $item2->estado          = $estado;
-                $item2->cep             = $cep;
                 $item2->tipo            = $tipo;
                 $item2->status          = $status;
                 $item2->entregadores_id = 195;
@@ -165,14 +153,6 @@ if ($arquivos != false) {
             $item2->data            = $_POST['data'];
             $item2->vencimento      = $_POST['vencimento'];
             $item2->codigo          = $codigo;
-            $item2->destinatario    = $_POST['codbarra'];
-            $item2->numero          = $_POST['numero'];
-            $item2->endereco        = "";
-            $item2->logradouro      = "";
-            $item2->bairro          = "";
-            $item2->municipio       = "SÃO LUÍS";
-            $item2->estado          = "MA";
-            $item2->cep             = "65000-000";
             $item2->tipo            = "BOLETO";
             $item2->status          = 3;
             $item2->entregadores_id = 195;
@@ -205,14 +185,6 @@ if ($arquivos != false) {
         $item2->data            = $_POST['data'];
         $item2->vencimento      = $_POST['vencimento'];
         $item2->codigo          = $_POST['codbarra'];
-        $item2->destinatario    = $_POST['codbarra'];
-        $item2->numero          = "Sem/Numero";
-        $item2->endereco        = "";
-        $item2->logradouro      = "";
-        $item2->bairro          = "";
-        $item2->municipio       = 'São Luis ';
-        $item2->estado          = 'Maranhão';
-        $item2->cep             = '650000';
         $item2->tipo            = 'BOLETOS';
         $item2->status          = 3;
         $item2->entregadores_id = 195;
