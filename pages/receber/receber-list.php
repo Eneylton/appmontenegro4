@@ -1,4 +1,5 @@
 <?php
+
 require __DIR__ . '../../../vendor/autoload.php';
 
 use App\Entidy\Cliente;
@@ -33,7 +34,6 @@ if ($user_acesso == 6) {
 
     $user_cli = UserCli::getIDCli('*', 'user_cli', $usuario, null, null, null);
     $id_cli = $user_cli->clientes_id;
-
 } else {
     define('TITLE', 'Controle de Envio');
     define('BRAND', 'Controle de Envio');
@@ -160,7 +160,16 @@ setores AS st ON (r.setores_id = st.id)
     INNER JOIN
 servicos AS s ON (r.servicos_id = s.id)
     INNER JOIN
-usuarios AS u ON (r.usuarios_id = u.id)', 'st.id= 1 AND u.id IN (28,29,30)', null, 'r.id DESC LIMIT 50', null);
+usuarios AS u ON (r.usuarios_id = u.id)', 'st.id= 1 AND c.id IN (SELECT 
+uc.clientes_id AS id_cliente
+FROM
+user_cli AS uc
+    INNER JOIN
+clientes AS c ON (c.id = uc.clientes_id)
+    INNER JOIN
+usuarios u ON (u.id = uc.usuarios_id)
+WHERE
+ u.id = ' . $usuario . ')', null, 'r.id DESC LIMIT 50', null);
 } else {
     $listar = Receber::getList(' r.id AS id,
     r.data AS data,
@@ -183,7 +192,16 @@ setores AS st ON (r.setores_id = st.id)
     INNER JOIN
 servicos AS s ON (r.servicos_id = s.id)
     INNER JOIN
-usuarios AS u ON (r.usuarios_id = u.id)', 'st.id= 1 AND u.id IN (28,29,30)', null, 'r.id DESC LIMIT 50', null);
+usuarios AS u ON (r.usuarios_id = u.id)', 'st.id= 1 AND c.id IN (SELECT 
+uc.clientes_id AS id_cliente
+FROM
+user_cli AS uc
+    INNER JOIN
+clientes AS c ON (c.id = uc.clientes_id)
+    INNER JOIN
+usuarios u ON (u.id = uc.usuarios_id)
+WHERE
+ u.id = ' . $usuario . ')', null, 'r.id DESC LIMIT 50', null);
 }
 
 

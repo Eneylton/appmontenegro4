@@ -81,7 +81,7 @@ if ($_GET['entregadores_id'] != 0) {
     }
 
 
-    $listar = Boleto::getList('b.id,b.data_fim as vencimento,
+    $listar = Boleto::getList('b.id,b.data_fim as vencimento,b.data as data_inicio,
     b.nota,
     b.sequencia,
     b.codigo,
@@ -134,7 +134,7 @@ if ($_GET['entregadores_id'] != 0) {
         }
     }
 
-    $listar = Boleto::getList('b.id,b.data_fim as vencimento,
+    $listar = Boleto::getList('b.id,b.data_fim as vencimento,b.data as data_inicio,
     b.nota,
     b.sequencia,
     b.codigo,
@@ -171,7 +171,7 @@ if ($_GET['entregadores_id'] != 0) {
 
     $nome_entregador = "RELATÓRIO GERAL DE ENTREGADORES...";
 
-    $listar = Boleto::getList('b.id,b.data_fim as vencimento,
+    $listar = Boleto::getList('b.id,b.data_fim as vencimento,b.data as data_inicio,
     b.nota,
     b.sequencia,
     b.codigo,
@@ -210,7 +210,7 @@ if ($_GET['entregadores_id'] != 0) {
 
 foreach ($listar as $item) {
 
-    $vencimento = $item->vencimento;
+    $vencimento = $item->data_inicio;
 
     $contador += 1;
 
@@ -243,7 +243,7 @@ foreach ($listar as $item) {
                         <td style="text-transform:uppercase;font-size:8px;text-align:center;width:50px">'   . $contador . '</td>
                         <td style="text-transform:uppercase;font-size:8px;text-align:left">'  . substr($item->codigo, -50)  . '</td>
                         <td style="text-transform:uppercase;font-size:8px;text-align:left;;width:40px">'  . $item->nota  . '</td>
-                        <td style="text-transform:uppercase;font-size:8px;text-align:left;width:150px">'  . date('d/m/Y  Á\S  H:i:s', strtotime($item->vencimento)) . '</td>
+                        <td style="text-transform:uppercase;font-size:8px;text-align:left;width:150px">' . date('d/m/Y  Á\S  H:i:s', strtotime($item->data_inicio)) . ' | '  . date('d/m/Y  Á\S  H:i:s', strtotime($item->vencimento)) . '</td>
                         <td style="text-transform:uppercase;font-size:8px;text-align:left;width:150px">' . substr($item->nome, 0) . '</td>
                         <td style="text-transform:uppercase;font-size:8px;text-align:left;width:150px">' . $item->logradouro . '
                         - ' . $item->numero . ' - ' . $item->bairro . '- ' . $item->municipio . ' - ' . $item->uf . '</td>

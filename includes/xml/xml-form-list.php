@@ -67,7 +67,7 @@ $un     =          "";
 $resultados = '';
 $contador  = 0;
 
-$listar = NotaFiscal::getList('*', 'notafiscal',null,null,'id desc');
+$listar = NotaFiscal::getList('*', 'notafiscal', null, null, 'id desc');
 
 foreach ($listar as $item) {
 
@@ -77,7 +77,7 @@ foreach ($listar as $item) {
         <td>' . $contador . '</td>
         <td>' . date('d/m/Y  Á\S  H:i:s', strtotime($item->data)) . '</td>
         <td>' . $item->notafiscal . ' - ' . $item->serie . '</td>
-        <td>' . $item->razaosocial . '</td>
+        <td style="text-transform:uppercase">' . $item->razaosocial . '</td>
         <td>' . $item->chave . '</td>
         <td style="text-align:center"><i style="color:#28a745" class="fas fa-check"></i></td>
       
@@ -112,8 +112,7 @@ $resultados = strlen($resultados) ? $resultados : '<tr>
 
                                     <div class="col-6">
 
-                                        <input type="file" name="arquivo[]" class="form-control" value="" id="imagem"
-                                            name="arquivo" multiple>
+                                        <input type="file" name="arquivo[]" class="form-control" value="" id="imagem" name="arquivo" multiple>
 
 
                                     </div>

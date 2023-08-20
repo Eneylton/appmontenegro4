@@ -3,7 +3,6 @@ require __DIR__ . '../../../vendor/autoload.php';
 
 use App\Entidy\ControlEnvio;
 use App\Entidy\Destinatario;
-use App\Entidy\Importacao;
 use App\Entidy\NotaFiscal;
 use App\Entidy\Produto;
 use App\Entidy\Receber;
@@ -13,6 +12,10 @@ use App\Session\Login;
 
 define('TITLE', 'Importação XML - Nota Fiscal Eletrônica');
 define('BRAND', 'XML');
+
+$numero_de_bytes1 = 8;
+$restultado_bytes1 = random_bytes($numero_de_bytes1);
+$codigoCpF = bin2hex($restultado_bytes1);
 
 $usuariologado = Login::getUsuarioLogado();
 
@@ -183,7 +186,16 @@ if (isset($_FILES['arquivo'])) {
                     $dest_xNome = $xml->NFe->infNFe->dest->xNome;
                     $dest_xLgr = $xml->NFe->infNFe->dest->enderDest->xLgr;
                     $dest_nro =  $xml->NFe->infNFe->dest->enderDest->nro;
+
                     $dest_cpf =  $xml->NFe->infNFe->dest->CPF;
+
+                    if ($dest_cpf  != "") {
+
+                        $dest_cpf =  $xml->NFe->infNFe->dest->CPF;
+                    } else {
+                        $dest_cpf = "";
+                    }
+
                     $dest_xBairro = $xml->NFe->infNFe->dest->enderDest->xBairro;
                     $dest_cMun = $xml->NFe->infNFe->dest->enderDest->cMun;
                     $dest_xMun = $xml->NFe->infNFe->dest->enderDest->xMun;
@@ -213,8 +225,12 @@ if (isset($_FILES['arquivo'])) {
                     $item->autorizacao          = $nProt;
                     $item->notafiscal           = $nNF;
                     $item->serie                = $serie;
-                    $item->razaosocial          = $emit_xFant;
                     $item->cnpj                 = $emit_CNPJ;
+                    if ($emit_xFant != "") {
+                        $item->razaosocial = $emit_xFant;
+                    } else {
+                        $item->razaosocial = $emit_xNome;
+                    }
                     $item->inscricaoestadual    = $emit_IE;
                     $item->bcicms               = $vBCST;
                     $item->totalproduto         = $vProd;
@@ -227,17 +243,13 @@ if (isset($_FILES['arquivo'])) {
                     $item->cadastar();
 
                     $notaID = $item->id;
-
-                    $import = new Importacao;
-                    $import->data                 = $data;
-                    $import->notafiscal           = $chave;
-                    $import->serie                = $serie;
-                    $import->razaosocial          = $emit_xFant;
-                    $import->notafiscal_id        = $notaID;
-                    $import->cadastar();
                 }
 
-                $consultor = Destinatario::getIDCpf('*', 'destinatario', $dest_cpf, null, null, null);
+                if ($dest_cpf != "") {
+                    $consultor = Destinatario::getIDCpf('*', 'destinatario', $dest_cpf, null, null, null);
+                } else {
+                    $consultor = false;
+                }
 
                 if ($consultor != false) {
 
