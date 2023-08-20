@@ -117,9 +117,13 @@ if (isset($_POST['adicionar'])) {
             $dest_email =         $destinatario->email;
             $dest_notafiscal_id = $destinatario->notafiscal_id;
 
+            $contarSequencia = Boleto::getQtd('COUNT(*) as qtd', 'boletos', 'receber_id= ' . $_POST['receber_id']);
+
+            $conta = intval($contarSequencia + 1);
+
             $item2 = new Boleto;
             $item2->data            = $data_importacao;
-            $item2->sequencia       = 1;
+            $item2->sequencia       = $conta;
             $item2->coleta          = $data_coleta;
             $item2->data_inicio     = $inicio;
             $item2->data_fim        = $fim;

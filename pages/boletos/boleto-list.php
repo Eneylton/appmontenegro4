@@ -29,7 +29,8 @@ if (isset($_GET['id_item'])) {
 
     $id = $_GET['id_item'];
 
-    $listar = Boleto::getList('b.id,
+    $listar = Boleto::getList(
+        'b.id,
     b.nota,
     b.sequencia,
     b.codigo,
@@ -54,16 +55,21 @@ if (isset($_GET['id_item'])) {
     d.flag,
     d.pais,
     d.telefone,
-    d.email', 
-    
-    'boletos AS b
+    d.email',
+
+        'boletos AS b
     INNER JOIN
     destinatario AS d ON (b.destinatario_id = d.id)
     INNER JOIN
     ocorrencias AS o ON (o.id = b.ocorrencias_id)
     INNER JOIN
     entregadores AS e ON (b.entregadores_id = e.id)
-', 'b.receber_id=' . $id, null, null, null);
+',
+        'b.receber_id=' . $id,
+        null,
+        'b.sequencia ASC',
+        null
+    );
 }
 if (isset($_GET['id_param'])) {
 
@@ -74,7 +80,8 @@ if (isset($_GET['id_param'])) {
 
     $flag = $res->setores_id;
 
-    $listar = Boleto::getList('b.id,
+    $listar = Boleto::getList(
+        'b.id,
     b.nota,
     b.sequencia,
     b.codigo,
@@ -99,16 +106,21 @@ if (isset($_GET['id_param'])) {
     d.pais,
     d.telefone,
     d.flag,
-    d.email', 
-    
-    'boletos AS b
+    d.email',
+
+        'boletos AS b
     INNER JOIN
     destinatario AS d ON (b.destinatario_id = d.id)
     INNER JOIN
     ocorrencias AS o ON (o.id = b.ocorrencias_id)
     INNER JOIN
     entregadores AS e ON (b.entregadores_id = e.id)
-', 'b.entregadores_id=' . $id_param . ' AND b.receber_id=' . $receber_id);
+',
+        'b.entregadores_id=' . $id_param . ' AND b.receber_id=' . $receber_id,
+        null,
+        'b.sequencia ASC',
+        null
+    );
 }
 
 $entregadores = Entregador::getList('*', 'entregadores', 'status=1', 'apelido ASC');

@@ -130,7 +130,7 @@ class Boleto
     public static function getQtd($fields = null, $table = null, $where = null, $order = null, $limit = null)
     {
 
-        return (new Database('boletos'))->select('COUNT(*) as qtd', 'boletos', null, null)
+        return (new Database('boletos'))->select('COUNT(*) as qtd', 'boletos', $where, null)
             ->fetchObject()
             ->qtd;
     }
