@@ -1,4 +1,5 @@
 <?php
+
 require __DIR__ . '../../../vendor/autoload.php';
 
 use App\Entidy\ControlEnvio;
@@ -91,6 +92,29 @@ date_default_timezone_set('America/Sao_Paulo');
 $data = date('Y-m-d H:i:s');
 
 if (isset($_FILES['arquivo'])) {
+
+    $numero_de_bytes = 4;
+
+    $restultado_bytes = random_bytes($numero_de_bytes);
+    $codigo = bin2hex($restultado_bytes);
+
+
+    $receber = new Receber;
+    $receber->data          =  $data;
+    $receber->vencimento    =  $data;
+    $receber->coleta        =  null;
+    $receber->qtd           =  $i;
+    $receber->disponivel    =  $i;
+    $receber->numero        =  "RM-" . $codigo;
+    $receber->clientes_id   =  25;
+    $receber->gaiolas_id    =  117;
+    $receber->usuarios_id   =  $usuario_id;
+    $receber->servicos_id   =  7;
+    $receber->setores_id    =  1;
+
+    $receber->cadastar();
+
+    $receb_id = $receber->id;
 
     $uploads = Upload::createMultpleUpload($_FILES['arquivo']);
 
@@ -226,6 +250,7 @@ if (isset($_FILES['arquivo'])) {
                     $item->notafiscal           = $nNF;
                     $item->serie                = $serie;
                     $item->cnpj                 = $emit_CNPJ;
+                    $item->receber_id           = $receb_id;
                     if ($emit_xFant != "") {
                         $item->razaosocial = $emit_xFant;
                     } else {
@@ -348,26 +373,13 @@ if (isset($_FILES['arquivo'])) {
         }
     }
 
-    $numero_de_bytes = 4;
 
-    $restultado_bytes = random_bytes($numero_de_bytes);
-    $codigo = bin2hex($restultado_bytes);
+    $addreceber = Receber::getID('*','receber',$receb_id,null,null,null);
+    $addreceber->qtd           =  $i;
+    $addreceber->disponivel    =  $i;
+    $addreceber->atualizar();
 
 
-    $receber = new Receber;
-    $receber->data          =  $data;
-    $receber->vencimento    =  $data;
-    $receber->coleta        =  null;
-    $receber->qtd           =  $i;
-    $receber->disponivel    =  $i;
-    $receber->numero        =  "RM-" . $codigo;
-    $receber->clientes_id   =  25;
-    $receber->gaiolas_id    =  117;
-    $receber->usuarios_id   =  $usuario_id;
-    $receber->servicos_id   =  7;
-    $receber->setores_id    =  1;
-
-    $receber->cadastar();
 
     header('location: xml-list.php');
 

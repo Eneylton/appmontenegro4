@@ -30,6 +30,7 @@ class Boleto
     public $notafiscal_id;
     public $destinatario_id;
     public $remessa;
+    public $destinatario;
 
 
     public function cadastar()
@@ -59,6 +60,7 @@ class Boleto
             'notafiscal_id'           => $this->notafiscal_id,
             'destinatario_id'         => $this->destinatario_id,
             'remessa'                 => $this->remessa,
+            'destinatario'            => $this->destinatario,
             'receber_id'              => $this->receber_id
 
         ]);
@@ -90,6 +92,7 @@ class Boleto
             'notafiscal_id'           => $this->notafiscal_id,
             'destinatario_id'         => $this->destinatario_id,
             'remessa'                 => $this->remessa,
+            'destinatario'            => $this->destinatario,
             'receber_id'              => $this->receber_id
         ]);
     }
@@ -125,7 +128,11 @@ class Boleto
             ->fetchAll(PDO::FETCH_CLASS, self::class);
     }
 
-
+    public static function getBoletosListID($fields, $table, $where, $order, $limit)
+    {
+        return (new Database('boletos'))->select($fields, $table, 'receber_id = ' . $where, $order, $limit)
+            ->fetchAll(PDO::FETCH_CLASS, self::class);
+    }
 
     public static function getQtd($fields = null, $table = null, $where = null, $order = null, $limit = null)
     {

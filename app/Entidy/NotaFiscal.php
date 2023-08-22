@@ -26,6 +26,7 @@ class NotaFiscal
     public $totalipi;
     public $totalnota;
     public $usuarios_id;
+    public $receber_id;
 
     public function cadastar()
     {
@@ -51,6 +52,7 @@ class NotaFiscal
             'desconto'                => $this->desconto,
             'totalipi'                => $this->totalipi,
             'totalnota'               => $this->totalnota,
+            'receber_id'              => $this->receber_id,
             'usuarios_id'             => $this->usuarios_id
 
         ]);
@@ -78,6 +80,7 @@ class NotaFiscal
             'desconto'                => $this->desconto,
             'totalipi'                => $this->totalipi,
             'totalnota'               => $this->totalnota,
+            'receber_id'              => $this->receber_id,
             'usuarios_id'             => $this->usuarios_id
         ]);
     }

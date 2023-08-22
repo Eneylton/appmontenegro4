@@ -2,9 +2,11 @@
 
 require __DIR__ . '../../../vendor/autoload.php';
 
+use App\Entidy\Boleto;
+use App\Entidy\NotaFiscal;
+use App\Entidy\Produto;
 use App\Entidy\Receber;
 use App\Session\Login;
-
 
 Login::requireLogin();
 
@@ -22,41 +24,28 @@ if (!isset($_GET['id']) or !is_numeric($_GET['id'])) {
 
 $value = Receber::getID('*', 'receber', $_GET['id'], null, null);
 
-// $id = $value->id;
+$id = $value->id;
 
-// $id_gaiola = $value->gaiolas_id;
+$listBoletos = Boleto::getBoletosListID('*', 'Boletos', $_GET['id'], null, null, null);
 
-// $qtd = $value->qtd;
+if ($listBoletos != "") {
 
-// $result = Gaiola::getID('*','gaiolas',$id_gaiola,null,null);
+    foreach ($listBoletos as $item) {
+        $boletos = Boleto::getID('*', 'boletos', $item->id, null, null, null);
+        $notafiscal = NotaFiscal::getID('*', 'notafiscal', $item->notafiscal_id, null, null, null);
+        $boletos->excluir();
+        $notafiscal->excluir();
+        $produtos = Produto::getIDProdutos('*', 'produtos', $item->notafiscal_id, null, null, null);
 
-// $qtd_baia = $result->qtd;
-
-// $total_baia = ($qtd_baia - $qtd);
-
-// $result_produtor = Producao::getReceberID('*','producao',$id,null,null);
-
-// $id_producao = $result_produtor->id;
-
-// $value_entrega = Entrega ::getEntregaID('*','entrega',$id_producao,null,null);
-
-
-if (!$value instanceof Receber) {
-    header('location: index.php?status=error');
-
-    exit;
+        foreach ($produtos as $item) {
+            $res = Produto::getID('*', 'produtos', $item->id, null, null);
+            $res->excluir();
+        }
+    }
 }
 
-
-
 if (!isset($_POST['excluir'])) {
-
-    //$result->qtd = $total_baia;
-    //$result-> atualizar();
-
     $value->excluir();
-    // $value_entrega->excluir();
-
     header('location: receber-list.php?status=del');
 
     exit;
