@@ -51,7 +51,15 @@ if (isset($_POST['receber_id'])) {
 }
 
 if (isset($_GET['id_item'])) {
-    $qtd_entregador = EntregadorQtd::getListView('*', 'view_entregador_qtd as v', 'v.id=' . $_GET['id_item'], null, null, null);
+    $qtd_entregador = EntregadorQtd::getList('eq.receber_id AS id,
+    e.id AS entregador_id,
+    e.apelido AS entregador,
+    eq.qtd AS qtd,
+    eq.data_ini AS data_ini,
+    eq.vencimento AS vencimento', 'entregador_qtd as eq
+    JOIN entregadores e ON (e.id = eq.entregadores_id)
+	JOIN receber as r ON (r.id = eq.receber_id)
+    ', 'r.id=' . $_GET['id_item'], null, null, null);
 }
 
 if (isset($_POST['id_entrega'])) {

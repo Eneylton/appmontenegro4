@@ -67,7 +67,7 @@ if (isset($_GET['id_item'])) {
 ',
         'b.receber_id=' . $id,
         null,
-        'b.sequencia ASC',
+        'b.sequencia DESC',
         null
     );
 }
@@ -118,7 +118,7 @@ if (isset($_GET['id_param'])) {
 ',
         'b.entregadores_id=' . $id_param . ' AND b.receber_id=' . $receber_id,
         null,
-        'b.sequencia ASC',
+        'b.sequencia DESC',
         null
     );
 }

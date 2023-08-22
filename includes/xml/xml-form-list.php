@@ -78,7 +78,7 @@ foreach ($listar as $item) {
         <td>' . date('d/m/Y  Á\S  H:i:s', strtotime($item->data)) . '</td>
         <td>' . $item->notafiscal . ' - ' . $item->serie . '</td>
         <td style="text-transform:uppercase">' . $item->razaosocial . '</td>
-        <td>' . $item->chave . '</td>
+        <td style="text-transform:uppercase">' . $item->chave . '</td>
         <td style="text-align:center"><i style="color:#28a745" class="fas fa-check"></i></td>
       
         <td style="text-align: center;">

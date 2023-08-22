@@ -109,6 +109,13 @@ class NotaFiscal
         return (new Database('notafiscal'))->select($fields, $table, 'id = ' . $where, $order, $limit)
             ->fetchObject(self::class);
     }
+
+    public static function getIDNotaFiscal($fields, $table, $where, $order, $limit)
+    {
+        return (new Database('notafiscal'))->select($fields, $table, 'receber_id = ' . $where, $order, $limit)
+            ->fetchAll(PDO::FETCH_CLASS, self::class);
+    }
+
     public static function getIDChave($fields, $table, $where, $order, $limit)
     {
         return (new Database('notafiscal'))->select($fields, $table, 'chave = ' . $where, $order, $limit)

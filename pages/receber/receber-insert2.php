@@ -3,7 +3,9 @@
 require __DIR__ . '../../../vendor/autoload.php';
 
 use App\Entidy\Boleto;
+use App\Entidy\Destinatario;
 use App\Entidy\EntregadorQtd;
+use App\Entidy\NotaFiscal;
 use App\Entidy\Receber;
 use App\Session\Login;
 
@@ -39,13 +41,6 @@ if (isset($_POST['adicionar'])) {
         $item2->vencimento      = $_POST['vencimento'];
         $item2->codigo          = $_POST['codbarra2'];
         $item2->destinatario    = $_POST['codbarra2'];
-        $item2->numero          = $_POST['numero'];
-        $item2->endereco        = $endereco2;
-        $item2->logradouro      = $logradouro2;
-        $item2->bairro          = $bairro;
-        $item2->municipio       = "SÃO LUÍS";
-        $item2->estado          = "MA";
-        $item2->cep             = "65000-000";
         $item2->tipo            = "BOLETO";
         $item2->status          = 3;
         $item2->ocorrencias_id  = 18;
@@ -136,7 +131,7 @@ foreach ($arquivo_tmp as $key) {
 
 if (!isset($arquivo_tmp)) {
 
-
+    $id_rec  = $receber->id;
     $receber->data            = $_POST['data'];
     $receber->vencimento      = $_POST['vencimento'];
     $receber->disponivel      = $cont_disp;
@@ -146,26 +141,74 @@ if (!isset($arquivo_tmp)) {
     $receber->servicos_id     = 1;
     $receber->clientes_id     = $_POST['clientes_id'];
     $receber->usuarios_id     = $usuario;
+    $receber->remessa         = 'RM-940119';
     $receber->gaiolas_id      = $id_gaiola;
     $receber->atualizar();
 
+
+    
+    $numero_de_bytes = 18;
+    $restultado_bytes = random_bytes($numero_de_bytes);
+    $codigo = bin2hex($restultado_bytes);
+
+    $nota = new NotaFiscal;
+    $nota->valoricms            = 1;
+    $nota->data                 = $_POST['data'];
+    $nota->chave                = $codigo;
+    $nota->autorizacao          = 478512422;
+    $nota->notafiscal           = 47852;
+    $nota->serie                = 77;
+    $nota->cnpj                 = 74558277800012;
+    if ($emit_xFant != "") {
+    $nota->razaosocial = 'MonteNEgro';
+    } else {
+    $nota->razaosocial = 'MonteNEgro';
+    }
+    $nota->inscricaoestadual    = 8788481;
+    $nota->bcicms               = 0;
+    $nota->totalproduto         = 0;
+    $nota->frete                = 1;
+    $nota->desconto             = 1;
+    $nota->totalipi             = 5;
+    $nota->totalnota            = 78;
+    $nota->usuarios_id          = $usuario;
+    $nota->receber_id           = $id_rec ;
+
+    $nota->cadastar();
+
+    $notaID = $nota->id;
+
+    $dest = new Destinatario;
+    $dest->cpf            = 62878452157;
+    $dest->nome           = 'MonteNegro Express';
+    $dest->logradouro     = 'Rua 25';
+    $dest->numero         = 'Nº 25';
+    $dest->bairro         = 'Calhau';
+    $dest->municipio      = 'São Luís';
+    $dest->uf             = 'Ma';
+    $dest->cep            = '65404511';
+    $dest->pais           = 'Brasil';
+    $dest->telefone       = '(98) 9158-4758';
+    $dest->email          = 'montenegroexpress@gmail.com';
+    $dest->notafiscal_id  = $notaID;
+    $dest->cadastar();
+
+    $destID = $dest->id;
+
     $item2 = new Boleto;
-    $item2->data            = $_POST['data'];
-    $item2->vencimento      = $_POST['vencimento'];
-    $item2->codigo          = $_POST['codbarra2'];
-    $item2->destinatario    = $_POST['codbarra2'];
-    $item2->numero          = $_POST['numero'];
-    $item2->endereco        = $endereco2;
-    $item2->logradouro      = $logradouro2;
-    $item2->bairro          = $bairro;
-    $item2->municipio       = "SÃO LUÍS";
-    $item2->estado          = "MA";
-    $item2->cep             = "65000-000";
-    $item2->tipo            = "BOLETO";
-    $item2->status          = 3;
-    $item2->ocorrencias_id  = 18;
-    $item2->entregadores_id = 195;
-    $item2->receber_id      = $receber_id;
+    $item2->data             = $_POST['data'];
+    $item2->vencimento       = $_POST['vencimento'];
+    $item2->codigo           = $_POST['codbarra2'];
+    $item2->tipo             = 'BOLETOS';
+    $item2->nota             = 45588 - 52;
+    $item2->destinatario     = 'MonteNegro Express';
+    $item2->status           = 3;
+    $item2->entregadores_id  = 195;
+    $item2->ocorrencias_id   = 18;
+    $item2->destinatario_id  = $destID;
+    $item2->remessa         = 'RM-940119';
+    $item2->receber_id       = $receber_id;
+
     $item2->cadastar();
 
 
@@ -222,13 +265,6 @@ if (!isset($arquivo_tmp)) {
                 $item2->vencimento      = $_POST['vencimento'];
                 $item2->codigo          = $codigo;
                 $item2->destinatario    = $destinatario;
-                $item2->numero          = $numero;
-                $item2->endereco        = $endereco2;
-                $item2->logradouro      = $logradouro2;
-                $item2->bairro          = $bairro;
-                $item2->municipio       = $municipio;
-                $item2->estado          = $estado;
-                $item2->cep             = $cep;
                 $item2->tipo            = $tipo;
                 $item2->status          = $status;
                 $item2->ocorrencias_id  = 18;

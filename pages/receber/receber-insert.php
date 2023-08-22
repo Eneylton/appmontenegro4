@@ -116,6 +116,7 @@ if ($arquivos != false) {
                 $item2->status          = $status;
                 $item2->entregadores_id = 195;
                 $item2->ocorrencias_id  = 18;
+                $item2->remessa         = 'RM-940119';
                 $item2->receber_id      = $receber_id;
 
                 $item2->cadastar();
@@ -142,6 +143,7 @@ if ($arquivos != false) {
         $item->clientes_id     = $_POST['clientes_id'];
         $item->usuarios_id     = $usuario;
         $item->gaiolas_id      = $id_gaiola;
+        $item2->remessa        = 'RM-940119';
         $item->cadastar();
         $receber_id = $item->id;
 
@@ -159,6 +161,7 @@ if ($arquivos != false) {
             $item2->status          = 3;
             $item2->entregadores_id = 195;
             $item2->ocorrencias_id  = 18;
+            $item2->remessa         = 'RM-940119';
             $item2->receber_id      = $receber_id;
 
             $item2->cadastar();
@@ -208,6 +211,7 @@ if ($arquivos != false) {
         $nota->totalipi             = 5;
         $nota->totalnota            = 78;
         $nota->usuarios_id          = $usuario;
+        $nota->receber_id           = $receber_id;
 
         $nota->cadastar();
 
@@ -241,6 +245,7 @@ if ($arquivos != false) {
         $item2->entregadores_id  = 195;
         $item2->ocorrencias_id   = 18;
         $item2->destinatario_id  = $destID;
+        $item2->remessa         = 'RM-940119';
         $item2->receber_id       = $receber_id;
 
         $item2->cadastar();

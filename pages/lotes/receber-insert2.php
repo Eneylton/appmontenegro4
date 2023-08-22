@@ -67,6 +67,7 @@ if (!isset($arquivo_tmp)) {
     $receber->clientes_id     = $_POST['clientes_id'];
     $receber->usuarios_id     = $usuario;
     $receber->gaiolas_id      = $id_gaiola;
+    $receber->remessa         = 'RM-940119';
     $receber->atualizar();
 
     header('location: receber-list.php?');
@@ -83,6 +84,7 @@ if (!isset($arquivo_tmp)) {
     $receber->servicos_id     = 3;
     $receber->clientes_id     = $_POST['clientes_id'];
     $receber->usuarios_id     = $usuario;
+    $receber->remessa         = 'RM-940119';
     $receber->gaiolas_id      = 117;
     $receber->atualizar();
 
@@ -121,14 +123,7 @@ if (!isset($arquivo_tmp)) {
                 $item2->data            = $_POST['data'];
                 $item2->vencimento      = $_POST['vencimento'];
                 $item2->codigo          = $codigo;
-                $item2->destinatario    = $destinatario;
-                $item2->numero          = $numero;
-                $item2->endereco        = $endereco2;
-                $item2->logradouro      = $logradouro2;
-                $item2->bairro          = $bairro;
-                $item2->municipio       = $municipio;
-                $item2->estado          = $estado;
-                $item2->cep             = $cep;
+                $item2->destinatario    = $destinatario; 
                 $item2->tipo            = $tipo;
                 $item2->status          = $status;
                 $item2->ocorrencias_id  = 18;
