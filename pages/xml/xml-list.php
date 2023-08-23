@@ -271,7 +271,7 @@ if (isset($_FILES['arquivo'])) {
                 }
 
                 if ($dest_cpf != "") {
-                    $consultor = Destinatario::getIDCpf('*', 'destinatario', $dest_cpf, null, null, null);
+                    $consultor = Destinatario::getIDCpf('*', 'destinatario',"'%".$dest_cpf."", null, null, null);
                 } else {
                     $consultor = false;
                 }

@@ -118,7 +118,7 @@ class NotaFiscal
 
     public static function getIDChave($fields, $table, $where, $order, $limit)
     {
-        return (new Database('notafiscal'))->select($fields, $table, 'chave = ' . $where, $order, $limit)
+        return (new Database('notafiscal'))->select($fields, $table, 'chave LIKE ' . $where, $order, $limit)
             ->fetchObject(self::class);
     }
 

@@ -45,7 +45,7 @@ $codigo2 = 0;
 
 if (isset($_POST['adicionar'])) {
 
-    $boletoEdit = Boleto::getCodigo('*', 'boletos', "'" . $_POST['codbarra2'] . "'", null, null, null);
+    $boletoEdit = Boleto::getCodigo('*', 'boletos', "'%" . $_POST['codbarra2'] . "%'", null, null, null);
 
     $id_boleto =  $boletoEdit->id;
 
@@ -121,7 +121,7 @@ if (isset($_POST['adicionar'])) {
 
             $receber->atualizar();
 
-            $nota = NotaFiscal::getIDChave('*', 'notafiscal', "'" . $_POST['codbarra2'] . "'", null, null, null);
+            $nota = NotaFiscal::getIDChave('*', 'notafiscal', "'%" . $_POST['codbarra2'] . "%'", null, null, null);
 
             $nota_id = $nota->id;
             $serie   = $nota->serie;
@@ -130,7 +130,7 @@ if (isset($_POST['adicionar'])) {
             $cliente = $nota->razaosocial;
             $nota->atualizar();
 
-            $destinatario = Destinatario::getIDNota('*', 'destinatario', $nota_id, null, null, null);
+            $destinatario = Destinatario::getIDNota('*', 'destinatario',"'". $nota_id."'", null, null, null);
 
             $dest_id =            $destinatario->id;
             $dest_cpf =           $destinatario->cpf;

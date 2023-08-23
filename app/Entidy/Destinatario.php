@@ -111,7 +111,7 @@ class Destinatario
 
     public static function getIDCpf($fields, $table, $where, $order, $limit)
     {
-        return (new Database('destinatario'))->select($fields, $table, 'cpf = ' . $where, $order, $limit)
+        return (new Database('destinatario'))->select($fields, $table, 'cpf LIKE ' . $where, $order, $limit)
             ->fetchObject(self::class);
     }
 

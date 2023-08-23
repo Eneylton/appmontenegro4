@@ -25,8 +25,6 @@ if (!isset($_GET['id']) or !is_numeric($_GET['id'])) {
 
 $value = Receber::getID('*', 'receber', $_GET['id'], null, null);
 
-$id = $value->id;
-
 $listBoletos = Boleto::getBoletosListID('*', 'boletos', $_GET['id'], null, null, null);
 
 if ($listBoletos != "") {

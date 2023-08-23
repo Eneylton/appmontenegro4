@@ -171,7 +171,7 @@ class Boleto
 
     public static function getCodigo($fields, $table, $where, $order, $limit)
     {
-        return (new Database('boletos'))->select($fields, $table, 'codigo = ' . $where, $order, $limit)
+        return (new Database('boletos'))->select($fields, $table, 'codigo LIKE ' . $where, $order, $limit)
             ->fetchObject(self::class);
     }
 
