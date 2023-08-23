@@ -30,7 +30,6 @@ $cont2 = 0;
 $contar = 0;
 $arquivos = [];
 $array    = [];
-$arquivo_tmp = $_FILES['arquivo']['tmp_name'];
 
 $soma = 0;
 $qtd_entrega = 0;

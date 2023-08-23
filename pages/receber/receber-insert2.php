@@ -146,7 +146,7 @@ if (!isset($arquivo_tmp)) {
     $receber->atualizar();
 
 
-    
+
     $numero_de_bytes = 18;
     $restultado_bytes = random_bytes($numero_de_bytes);
     $codigo = bin2hex($restultado_bytes);
@@ -160,9 +160,9 @@ if (!isset($arquivo_tmp)) {
     $nota->serie                = 77;
     $nota->cnpj                 = 74558277800012;
     if ($emit_xFant != "") {
-    $nota->razaosocial = 'MonteNEgro';
+        $nota->razaosocial = 'MonteNEgro';
     } else {
-    $nota->razaosocial = 'MonteNEgro';
+        $nota->razaosocial = 'MonteNEgro';
     }
     $nota->inscricaoestadual    = 8788481;
     $nota->bcicms               = 0;
@@ -172,7 +172,7 @@ if (!isset($arquivo_tmp)) {
     $nota->totalipi             = 5;
     $nota->totalnota            = 78;
     $nota->usuarios_id          = $usuario;
-    $nota->receber_id           = $id_rec ;
+    $nota->receber_id           = $id_rec;
 
     $nota->cadastar();
 
@@ -210,8 +210,6 @@ if (!isset($arquivo_tmp)) {
     $item2->receber_id       = $receber_id;
 
     $item2->cadastar();
-
-
 
     header('location: ../lotes/lote-form-list.php?id_param=' . $receber_id);
     exit;
