@@ -196,7 +196,7 @@ if ($arquivos != false) {
 
         for ($i = 0; $i < $cont; $i++) {
 
-            $numero_de_bytes = 20;
+            $numero_de_bytes = 6;
             $restultado_bytes = random_bytes($numero_de_bytes);
             $codigo23 = bin2hex($restultado_bytes);
 
