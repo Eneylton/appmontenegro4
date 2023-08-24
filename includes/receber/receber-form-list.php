@@ -1,6 +1,5 @@
 <?php
 
-use App\Entidy\EntregadorQtd;
 use App\Funcao\CalcularQtd;
 
 $list = '';
