@@ -87,6 +87,7 @@ $vSeg =            "";
 $vDesc =           "";
 $vIPI =            "";
 $nProt =           "";
+$coleto =          "";
 
 date_default_timezone_set('America/Sao_Paulo');
 $data = date('Y-m-d H:i:s');
@@ -97,7 +98,6 @@ if (isset($_FILES['arquivo'])) {
 
     $restultado_bytes = random_bytes($numero_de_bytes);
     $codigo = bin2hex($restultado_bytes);
-
 
     $receber = new Receber;
     $receber->data          =  $data;
@@ -271,14 +271,32 @@ if (isset($_FILES['arquivo'])) {
                 }
 
                 if ($dest_cpf != "") {
-                    $consultor = Destinatario::getIDCpf('*', 'destinatario',"'%".$dest_cpf."", null, null, null);
+                    $consultor = Destinatario::getIDCpf('*', 'destinatario', "'%" . $dest_cpf . "%'", null, null, null);
                 } else {
                     $consultor = false;
                 }
 
                 if ($consultor != false) {
 
-                    $destID = $consultor->id;
+                    $dest = new Destinatario;
+                    $dest->cpf            = $consultor->cpf;
+                    $dest->nome           = $consultor->nome;
+                    $dest->logradouro     = $consultor->logradouro;
+                    $dest->numero         = $consultor->numero;
+                    $dest->bairro         = $consultor->bairro;
+                    $dest->municipio      = $consultor->municipio;
+                    $dest->uf             = $consultor->uf;
+                    $dest->cep            = $consultor->cep;
+                    $dest->pais           = $consultor->pais;
+                    $dest->telefone       = $consultor->telefone;
+                    $dest->telefone2      = $consultor->telefone2;
+                    $dest->email          = $consultor->email;
+                    $dest->flag           = $consultor->flag;
+                    $dest->complemento    = $consultor->complemento;
+                    $dest->notafiscal_id  = $notaID;
+                    $dest->cadastar();
+
+                    $destID = $dest->id;
                 } else {
                     $dest = new Destinatario;
                     $dest->cpf            = $dest_cpf;
@@ -374,7 +392,7 @@ if (isset($_FILES['arquivo'])) {
     }
 
 
-    $addreceber = Receber::getID('*','receber',$receb_id,null,null,null);
+    $addreceber = Receber::getID('*', 'receber', $receb_id, null, null, null);
     $addreceber->qtd           =  $i;
     $addreceber->disponivel    =  $i;
     $addreceber->atualizar();

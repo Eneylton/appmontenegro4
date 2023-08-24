@@ -244,7 +244,7 @@ if ($arquivos != false) {
 
             $destID = $dest->id;
 
-            $numero_de_bytes = 20;
+            $numero_de_bytes = 6;
             $restultado_bytes = random_bytes($numero_de_bytes);
             $codigo44 = bin2hex($restultado_bytes);
 
@@ -283,7 +283,7 @@ if ($arquivos != false) {
         $item->cadastar();
         $receber_id = $item->id;
 
-        $numero_de_bytes4 = 14;
+        $numero_de_bytes4 = 6;
         $restultado_bytes4 = random_bytes($numero_de_bytes4);
         $codigo4 = bin2hex($restultado_bytes4);
 

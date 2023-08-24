@@ -95,7 +95,6 @@ if (isset($_POST['receber_id'])) {
     $qtd = $receber->qtd;
     $disp = $receber->disponivel;
     $receber_id = $receber->id;
-
     $cont_total = $cont + $qtd;
     $cont_disp = $cont + $disp;
 }
@@ -147,7 +146,7 @@ if (!isset($arquivo_tmp)) {
 
 
 
-    $numero_de_bytes = 18;
+    $numero_de_bytes = 6;
     $restultado_bytes = random_bytes($numero_de_bytes);
     $codigo = bin2hex($restultado_bytes);
 

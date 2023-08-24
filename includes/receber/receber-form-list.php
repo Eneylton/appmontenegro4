@@ -149,58 +149,73 @@ foreach ($listar as $item) {
     }
 
     switch ($data_final) {
-        
+
+        case '-16':
+            $cor = "badge-danger";
+            $dia = "Já se passaram + de 15 dias do venci...";
+            break;
+
         case '-15':
             $cor = "badge-danger";
-            $dia = "Já se passaram 15 dias do vencimento...";
+            $dia = "Já se passaram 15 dias do venci...";
+            break;
         case '-14':
             $cor = "badge-danger";
-            $dia = "Já se passaram 14 dias do vencimento...";
+            $dia = "Já se passaram 14 dias do venci...";
+            break;
         case '-13':
             $cor = "badge-danger";
-            $dia = "Já se passaram 13 dias do vencimento...";
+            $dia = "Já se passaram 13 dias do venci...";
+            break;
         case '-12':
             $cor = "badge-danger";
-            $dia = "Já se passaram 12 dias do vencimento...";
+            $dia = "Já se passaram 12 dias do venci...";
+            break;
         case '-11':
             $cor = "badge-danger";
-            $dia = "Já se passaram 11 dias do vencimento...";
+            $dia = "Já se passaram 11 dias do venci...";
+            break;
         case '-10':
             $cor = "badge-danger";
-            $dia = "Já se passaram 10 dias do vencimento...";
+            $dia = "Já se passaram 10 dias do venci...";
+            break;
         case '-9':
             $cor = "badge-danger";
-            $dia = "Já se passaram 9 dias do vencimento...";
+            $dia = "Já se passaram 9 dias do venci...";
+            break;
         case '-8':
             $cor = "badge-danger";
-            $dia = "Já se passaram 8 dias do vencimento...";
+            $dia = "Já se passaram 8 dias do venci...";
+            break;
         case '->7':
             $cor = "badge-danger";
-            $dia = "Já se passaram 7 dias do vencimento...";
+            $dia = "Já se passaram 7 dias do venci...";
+            break;
         case '-6':
             $cor = "badge-danger";
-            $dia = "Já se passaram 6 dias do vencimento...";
+            $dia = "Já se passaram 6 dias do venci...";
+            break;
         case '-5':
             $cor = "badge-danger";
-            $dia = "Já se passaram 5 dias do vencimento...";
+            $dia = "Já se passaram 5 dias do venci...";
             break;
         case '-4':
             $cor = "badge-danger";
-            $dia = "Já se passaram 4 dias do vencimento...";
+            $dia = "Já se passaram 4 dias do venci...";
             break;
         case '-3':
             $cor = "badge-danger";
-            $dia = "Já se passaram 3 dias do vencimento...";
+            $dia = "Já se passaram 3 dias do venci...";
             break;
 
         case '-2':
             $cor = "badge-danger";
-            $dia = "Já se passaram 2 dias do vencimento...";
+            $dia = "Já se passaram 2 dias do venci...";
             break;
 
         case '-1':
             $cor = "badge-danger";
-            $dia = "Já se passou 1 dia do prazo de vencimento...";
+            $dia = "Já se passou 1 dia do prazo de venci...";
             break;
 
         case '0':
@@ -241,7 +256,7 @@ foreach ($listar as $item) {
 
     $flag = intval($item->disponivel);
 
-    if( $flag == 0){
+    if ($flag == 0) {
         $cor = "badge-success";
         $dia = "Concluido...";
     }
@@ -345,19 +360,14 @@ $resultados = strlen($resultados) ? $resultados : '<tr>
 
                 <div class="card back-black">
                     <div class="card-header">
-                        <button accesskey="q" title="ALT+Q" type="submit" class="btn btn-warning" data-toggle="modal"
-                            data-target="#modal-default"> <i class="fas fa-plus"></i> &nbsp; Novo</button>
-                        <a href="../../pages/roteiro/roteiro-list.php"> <button <?= $acesso == 6 ? 'disabled' : ''  ?>
-                                type="submit" class="btn btn-danger"> <i class="fa fa-motorcycle"></i>
+                        <button accesskey="q" title="ALT+Q" type="submit" class="btn btn-warning" data-toggle="modal" data-target="#modal-default"> <i class="fas fa-plus"></i> &nbsp; Novo</button>
+                        <a href="../../pages/roteiro/roteiro-list.php"> <button <?= $acesso == 6 ? 'disabled' : ''  ?> type="submit" class="btn btn-danger"> <i class="fa fa-motorcycle"></i>
                                 &nbsp;Roteiro /
                                 Entregador</button></a>
-                        <button disabled <?= $block ?> accesskey="r" title="ALT+R" style="margin-left: 10px;"
-                            type="submit" class="btn btn-secondary float-right" data-toggle="modal"
-                            data-target="#modal-data"> <i class="fas fa-print"></i> &nbsp; IMPRIMIR RELATÓRIOS</button>
-                            <button accesskey="r" title="ALT+R" style="margin-left: 10px;" type="submit"
-                                class="btn btn-danger float-right" data-toggle="modal" data-target="#modal-data">
-                                <i class="fas fa-print"></i> &nbsp; CONSULTAR NF-E
-                            </button>
+                        <button disabled <?= $block ?> accesskey="r" title="ALT+R" style="margin-left: 10px;" type="submit" class="btn btn-secondary float-right" data-toggle="modal" data-target="#modal-data"> <i class="fas fa-print"></i> &nbsp; IMPRIMIR RELATÓRIOS</button>
+                        <button accesskey="r" title="ALT+R" style="margin-left: 10px;" type="submit" class="btn btn-danger float-right" data-toggle="modal" data-target="#modal-data">
+                            <i class="fas fa-print"></i> &nbsp; CONSULTAR NF-E
+                        </button>
                     </div>
                     <!-- /.card-header -->
 
@@ -426,8 +436,7 @@ $resultados = strlen($resultados) ? $resultados : '<tr>
                                 <label>Recebido em: </label>
                                 <input value="<?php
                                                 date_default_timezone_set('America/Sao_Paulo');
-                                                echo date('Y-m-d\TH:i:s', time()); ?>" type="datetime-local"
-                                    class="form-control" name="data" required>
+                                                echo date('Y-m-d\TH:i:s', time()); ?>" type="datetime-local" class="form-control" name="data" required>
                             </div>
                         </div>
 
@@ -436,8 +445,7 @@ $resultados = strlen($resultados) ? $resultados : '<tr>
                                 <label>Vencimento em:</label>
                                 <input value="<?php
                                                 date_default_timezone_set('America/Sao_Paulo');
-                                                echo date('Y-m-d\TH:i:s', time()); ?>" type="datetime-local"
-                                    class="form-control" name="vencimento" required>
+                                                echo date('Y-m-d\TH:i:s', time()); ?>" type="datetime-local" class="form-control" name="vencimento" required>
                             </div>
                         </div>
 
@@ -462,8 +470,7 @@ $resultados = strlen($resultados) ? $resultados : '<tr>
                         <div class="col-6">
                             <div class="form-group">
                                 <label>Referência</label>
-                                <input type="text" class="form-control" style="text-transform:uppercase;" name="numero"
-                                    required>
+                                <input type="text" class="form-control" style="text-transform:uppercase;" name="numero" required>
                             </div>
                         </div>
                         <div class="col-6">
@@ -612,7 +619,7 @@ $resultados = strlen($resultados) ? $resultados : '<tr>
                         <div class="row">
 
                             <div class="col-lg-12 col-12">
-                            <label>Nº da Nota Fiscal</label>
+                                <label>Nº da Nota Fiscal</label>
                                 <input class="form-control" type="text" value="" name="chave">
                             </div>
 
