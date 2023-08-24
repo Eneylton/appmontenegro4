@@ -55,6 +55,13 @@ class EntregadorQtd
             ->fetchAll(PDO::FETCH_CLASS, self::class);
     }
 
+    public static function getListLimit($fields = null, $table = null, $where = null, $order = null, $limit = null)
+    {
+
+        return (new Database('entregador_qtd'))->select($fields, $table, $where, $order, $limit)
+            ->fetchObject(self::class);
+    }
+
 
     public static function getListEntregadorQTD($fields = null, $table = null, $where = null, $order = null, $limit = null)
     {

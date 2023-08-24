@@ -64,4 +64,11 @@ class CalcularQtd
             return '<span class="info-box-icon bg-success"><i class="fa fa-check"></i></span>';
         }
     }
+
+    public static function getQtdLimit($id)
+    {
+        $limite = EntregadorQtd::getListLimit('sum(qtd) as total', 'entregador_qtd', "receber_id= '" . $id . "'");
+
+        return $limite->total;
+    }
 }
