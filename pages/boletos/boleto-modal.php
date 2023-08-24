@@ -16,9 +16,14 @@ $checked = "";
 
 $param = filter_input(INPUT_GET, "id", FILTER_SANITIZE_NUMBER_INT);
 
-$value = Boleto::getID('*', 'boletos', $param, null, null);
+$value = Boleto::getID('*', 'boletos', $param, null, null, null);
 
 $entregador_id = $value->entregadores_id;
+$destinatario_id = $value->destinatario_id;
+
+$dest = Boleto::getID('*', 'destinatario', $destinatario_id, null, null, null);
+
+$dest_nome = $dest->nome;
 
 $ocorrencias = Ocorrencia::getList('*', 'ocorrencias', null, null, 'nome ASC');
 
@@ -61,7 +66,7 @@ $dados .= '<div class="row">
                <input type="hidden" name="id" value="' . $id . '">
                <input type="hidden" name="receber_id" value="' . $receber_id . '">
                <input type="hidden" name="codigo" value="' . $codigo . '">
-               <input type="hidden" name="destinatario" value="' . $destinatario . '">
+               <input type="hidden" name="destinatario" value="' . $dest_nome . '">
                <label>Data</label>
                <input style="text-transform:uppercase" type="datetime-local" class="form-control" name="data" value="' . $data . '">
                </div>
@@ -70,7 +75,7 @@ $dados .= '<div class="row">
             <div class="col-6">
                <div class="form-group">
                <label>Destinatário</label>
-               <input disabled style="text-transform:uppercas" type="text" class="form-control" name="destinatario" value="' . $destinatario . '">
+               <input disabled style="text-transform:uppercas" type="text" class="form-control" name="destinatario" value="' . $dest_nome . '">
                </div>
             </div>
             <div class="col-6">

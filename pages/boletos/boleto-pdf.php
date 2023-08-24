@@ -81,7 +81,8 @@ if ($_GET['entregadores_id'] != 0) {
     }
 
 
-    $listar = Boleto::getList('b.id,b.data_fim as vencimento,b.data as data_inicio,
+    $listar = Boleto::getList(
+        'b.id,b.data_fim as vencimento,b.data as data_inicio,
     b.nota,
     b.sequencia,
     b.codigo,
@@ -107,13 +108,19 @@ if ($_GET['entregadores_id'] != 0) {
     d.flag,
     d.pais,
     d.telefone,
-    d.email', ' boletos AS b
+    d.email',
+        ' boletos AS b
     INNER JOIN
     destinatario AS d ON (b.destinatario_id = d.id)
     INNER JOIN
     ocorrencias AS o ON (o.id = b.ocorrencias_id)
     INNER JOIN
-    entregadores AS e ON (b.entregadores_id = e.id)', ' b.receber_id=' . $id_param . ' AND b.entregadores_id=' . $_GET['entregadores_id'], null, 'b.sequencia ASC', null);
+    entregadores AS e ON (b.entregadores_id = e.id)',
+        ' b.receber_id=' . $id_param . ' AND b.entregadores_id=' . $_GET['entregadores_id'],
+        null,
+        'b.sequencia DESC',
+        null
+    );
 } else if ($_GET['id_entregador'] != 0) {
 
 
@@ -134,7 +141,8 @@ if ($_GET['entregadores_id'] != 0) {
         }
     }
 
-    $listar = Boleto::getList('b.id,b.data_fim as vencimento,b.data as data_inicio,
+    $listar = Boleto::getList(
+        'b.id,b.data_fim as vencimento,b.data as data_inicio,
     b.nota,
     b.sequencia,
     b.codigo,
@@ -160,13 +168,19 @@ if ($_GET['entregadores_id'] != 0) {
     d.flag,
     d.pais,
     d.telefone,
-    d.email', ' boletos AS b
+    d.email',
+        ' boletos AS b
     INNER JOIN
     destinatario AS d ON (b.destinatario_id = d.id)
     INNER JOIN
     ocorrencias AS o ON (o.id = b.ocorrencias_id)
     INNER JOIN
-    entregadores AS e ON (b.entregadores_id = e.id)', ' b.receber_id=' . $id_param . ' AND b.entregadores_id=' . $_GET['id_entregador'], null, 'b.sequencia ASC', null);
+    entregadores AS e ON (b.entregadores_id = e.id)',
+        ' b.receber_id=' . $id_param . ' AND b.entregadores_id=' . $_GET['id_entregador'],
+        null,
+        'b.sequencia DESC',
+        null
+    );
 } else {
 
     $nome_entregador = "RELATÓRIO GERAL DE ENTREGADORES...";
@@ -203,7 +217,7 @@ if ($_GET['entregadores_id'] != 0) {
     INNER JOIN
     ocorrencias AS o ON (o.id = b.ocorrencias_id)
     INNER JOIN
-    entregadores AS e ON (b.entregadores_id = e.id)', 'b.receber_id=' . $id_param, null, 'b.sequencia ASC', null);
+    entregadores AS e ON (b.entregadores_id = e.id)', 'b.receber_id=' . $id_param, null, 'b.sequencia DESC', null);
 }
 
 

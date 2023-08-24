@@ -47,7 +47,7 @@ entregadores AS e ON (ed.entregadores_id = e.id)
 INNER JOIN
 ocorrencias AS o ON (ed.ocorrencias_id = o.id)
 INNER JOIN
-usuarios AS u ON (ed.usuarios_id = u.id)', $param, null, null, null);
+usuarios AS u ON (ed.usuarios_id = u.id)', $param, null, 'ed.id DESC', null);
 
 foreach ($detalhe as $item) {
 
@@ -89,7 +89,7 @@ foreach ($detalhe as $item) {
     <div class="timeline">
   
     <div class="time-label">
-    <span class="bg-info" style="padding:10px">' . date('d/m/Y -- H:i:s', strtotime($item->data)) . ' | <span style="color:#5ee7ff">'.$item->usuario.'</span></span>
+    <span class="bg-info" style="padding:10px">' . date('d/m/Y -- H:i:s', strtotime($item->data)) . ' | <span style="color:#5ee7ff">' . $item->usuario . '</span></span>
     </div>
   
     <div>
