@@ -187,7 +187,7 @@ foreach ($listar as $item) {
             $cor = "badge-danger";
             $dia = "Já se passaram 8 dias do venci...";
             break;
-        case '->7':
+        case '-7':
             $cor = "badge-danger";
             $dia = "Já se passaram 7 dias do venci...";
             break;
@@ -219,7 +219,7 @@ foreach ($listar as $item) {
             break;
 
         case '0':
-            $cor = "badge-success";
+            $cor = "badge-dark";
             $dia = "Dia da Entrega...";
             break;
 

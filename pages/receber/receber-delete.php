@@ -46,18 +46,21 @@ if ($listBoletos != "") {
 
     $notafiscal = NotaFiscal::getIDNotaFiscal('*', 'notafiscal',"'". $_GET['id']."'", null, null, null);
     
-    foreach ($notafiscal as $res) {
+    if($notafiscal != ""){
+        foreach ($notafiscal as $res) {
 
-        $cod = NotaFiscal::getID('*','notafiscal',$res->id,null,null,null);
-        $cod->excluir();
+            $cod = NotaFiscal::getID('*','notafiscal',$res->id,null,null,null);
+            $cod->excluir();
+        }
+    
+        $produtos = Produto::getIDProdutos('*', 'produtos', $res->id, null, null, null);
+    
+        foreach ($produtos as $item) {
+            $res = Produto::getID('*', 'produtos', $item->id, null, null);
+            $res->excluir();
+        }  
+        
     }
-
-    $produtos = Produto::getIDProdutos('*', 'produtos', $res->id, null, null, null);
-
-    foreach ($produtos as $item) {
-        $res = Produto::getID('*', 'produtos', $item->id, null, null);
-        $res->excluir();
-    }  
     
     $value->excluir();
 
