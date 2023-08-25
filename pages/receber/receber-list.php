@@ -31,9 +31,6 @@ $user_acesso = intval($usuariologado['acessos_id']);
 if ($user_acesso == 6) {
     define('TITLE', 'Enviar Arquivos');
     define('BRAND', 'Enviar Arquivos');
-
-    $user_cli = UserCli::getIDCli('*', 'user_cli', $usuario, null, null, null);
-    $id_cli = $user_cli->clientes_id;
 } else {
     define('TITLE', 'Controle de Envio');
     define('BRAND', 'Controle de Envio');
@@ -114,6 +111,8 @@ servicos AS s ON (r.servicos_id = s.id)
     INNER JOIN
 usuarios AS u ON (r.usuarios_id = u.id)', 'st.id= 1', null, 'r.id DESC LIMIT 50', null);
 } else if ($user_acesso == 6) {
+
+
 
     $listar = Receber::getList(' r.id AS id,
     r.data AS data,
