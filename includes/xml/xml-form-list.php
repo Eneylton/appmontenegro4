@@ -21,17 +21,19 @@ clientes AS c ON (c.id = uc.clientes_id) ', "'" . $usuario_id . "'", null, null,
 
 $cli_id = 0;
 
-if ($cliuser != false) {
-    $cli_id = $cliuser->cli_id;
-    $cli_nome = $cliuser->nome;
-} else {
-    $mensagem = '
-    
-    <div class="alert alert-danger alert-dismissible">
-    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-    <h5><i class="icon fas fa-ban"></i> Atenção!</h5>
-    Você nâo tem Permissão para utilizar esse modilo !!!!!!.
-</div>';
+if ($acesso != 1) {
+    if ($cliuser != false) {
+        $cli_id = $cliuser->cli_id;
+        $cli_nome = $cliuser->nome;
+    } else {
+        $mensagem = '
+        
+        <div class="alert alert-danger alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <h5><i class="icon fas fa-ban"></i> Atenção!</h5>
+        Você nâo tem Permissão para utilizar esse modilo !!!!!!.
+    </div>';
+    }
 }
 
 $chave            = "";
@@ -100,14 +102,21 @@ $resultados = '';
 $contador  = 0;
 
 if ($acesso != 1) {
-    $listar = NotaFiscal::getList(' n.id as id,
-n.data as data,
-n.notafiscal as notafiscal,
-n.serie as serie,
-n.razaosocial as razaosocial,
-n.chave as chave', ' notafiscal AS n
-INNER JOIN
-receber AS r ON (n.receber_id = r.id)', 'r.clientes_id = ' . $cli_id, null, 'id desc');
+    $listar = NotaFiscal::getList('n.id as id,
+    n.data as data,
+    n.notafiscal as notafiscal,
+    n.serie as serie,
+    n.razaosocial as razaosocial,
+    n.chave as chave', 'notafiscal AS n
+    INNER JOIN
+    receber AS r ON (n.receber_id = r.id) WHERE r.clientes_id IN (SELECT 
+    uc.clientes_id AS id_cliente
+    FROM
+    user_cli AS uc
+        INNER JOIN
+    clientes AS c ON (c.id = uc.clientes_id)
+        INNER JOIN
+    usuarios u ON (u.id = ' . $usuario_id . '))', null, null, 'n.id desc');
 } else {
     $listar = NotaFiscal::getList(' n.id as id,
 n.data as data,

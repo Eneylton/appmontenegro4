@@ -34,14 +34,6 @@ clientes AS c ON (c.id = uc.clientes_id) ', "'" . $usuario_id . "'", null, null,
 if ($cliuser != false) {
     $cli_nome = $cliuser->nome;
     $cli_id = $cliuser->cli_id;
-} else {
-
-    include __DIR__ . '../../../includes/layout/header.php';
-    include __DIR__ . '../../../includes/layout/top.php';
-    include __DIR__ . '../../../includes/layout/menu.php';
-    include __DIR__ . '../../../includes/layout/content.php';
-    include __DIR__ . '../../../includes/xml/xml-form-list.php';
-    include __DIR__ . '../../../includes/layout/footer.php';
 }
 
 $contador = 0;

@@ -1,18 +1,51 @@
 <?php
+
 require __DIR__ . '../../../vendor/autoload.php';
 
+use App\Entidy\ControlEnvio;
+use App\Entidy\Destinatario;
+use App\Entidy\NotaFiscal;
+use App\Entidy\Produto;
+use App\Entidy\Receber;
+use App\Entidy\UserCli;
+use App\File\Upload;
 use App\Session\Login;
-use App\File\Xml;
 
 
-define('TITLE', 'Importação XML');
+define('TITLE', 'Importação XML - Nota Fiscal Eletrônica');
 define('BRAND', 'XML');
 
+$numero_de_bytes1 = 8;
+$restultado_bytes1 = random_bytes($numero_de_bytes1);
+$codigoCpF = bin2hex($restultado_bytes1);
 
 $usuariologado = Login::getUsuarioLogado();
 
+$acesso = $usuariologado['acessos_id'];
+
 $usuario_id = $usuarios_id = $usuariologado['id'];
 $usuario    = $usuarios_id = $usuariologado['nome'];
+
+
+$cliuser = UserCli::getIDCliUser('uc.id as id,c.id as cli_id,c.nome as nome', 'user_cli AS uc
+INNER JOIN
+clientes AS c ON (c.id = uc.clientes_id) ', "'" . $usuario_id . "'", null, null, null);
+
+if ($cliuser != false) {
+    $cli_nome = $cliuser->nome;
+    $cli_id = $cliuser->cli_id;
+} else {
+
+    include __DIR__ . '../../../includes/layout/header.php';
+    include __DIR__ . '../../../includes/layout/top.php';
+    include __DIR__ . '../../../includes/layout/menu.php';
+    include __DIR__ . '../../../includes/layout/content.php';
+    include __DIR__ . '../../../includes/xml/xml-form-list.php';
+    include __DIR__ . '../../../includes/layout/footer.php';
+}
+
+$contador = 0;
+$i = 0;
 
 $chave            = "";
 $chave            = "";
@@ -75,131 +108,321 @@ $vSeg =            "";
 $vDesc =           "";
 $vIPI =            "";
 $nProt =           "";
+$coleto =          "";
 
+date_default_timezone_set('America/Sao_Paulo');
+$data = date('Y-m-d H:i:s');
 
 if (isset($_FILES['arquivo'])) {
-    $obUpload = new Xml($_FILES['arquivo']);
-    $sucesso = $obUpload->upload(__DIR__ . '../../../xml', false);
-    $obUpload->gerarNovoNome();
 
-    $param = $obUpload->getBasename();
+    $numero_de_bytes = 4;
 
-    if ($sucesso) {
+    $restultado_bytes = random_bytes($numero_de_bytes);
+    $codigo = bin2hex($restultado_bytes);
 
-        $chave = $param;
+    $receber = new Receber;
+    $receber->data          =  $data;
+    $receber->vencimento    =  $data;
+    $receber->coleta        =  null;
+    $receber->qtd           =  $i;
+    $receber->disponivel    =  $i;
+    $receber->numero        =  "RM-" . $codigo;
+    $receber->clientes_id   =  $cli_id;
+    $receber->gaiolas_id    =  117;
+    $receber->usuarios_id   =  $usuario_id;
+    $receber->servicos_id   =  7;
+    $receber->setores_id    =  1;
 
-        if (isset($_POST['chave']))
-            $chave = $_POST['chave'];
-        if (isset($_GET['chave']))
-            $chave = $_GET['chave'];
+    $receber->cadastar();
+
+    $receb_id = $receber->id;
+
+    $uploads = Upload::createMultpleUpload($_FILES['arquivo']);
+
+    foreach ($uploads as $obUpload) {
+        $i += 1;
+        $sucesso = $obUpload->upload(__DIR__ . '../../../xml', false);
+        $obUpload->gerarNovoNome();
+
+        $param = $obUpload->getBasename();
+
+        if ($sucesso) {
+
+            $chave = $param;
+
+            if (isset($_POST['chave']))
+                $chave = $_POST['chave'];
+            if (isset($_GET['chave']))
+                $chave = $_GET['chave'];
 
 
-        if ($chave) {
-            if ($chave == '') {
-                echo "<h4>Informe a chave de acesso!</h4>";
-                exit;
-            }
-            $arquivo = "../../xml/" . $chave;
-            if (file_exists($arquivo)) {
-                $arquivo = $arquivo;
-                $xml = simplexml_load_file($arquivo);
-                // imprime os atributos do objeto criado
-
-                if (empty($xml->protNFe->infProt->nProt)) {
-                    echo "<h1>ACESSO NEGADO ARQUIVO CT-e ... ADICIONE UM ARQUIVO NF-e!</h1>";
-
+            if ($chave) {
+                if ($chave == '') {
+                    echo "<h4>Informe a chave de acesso!</h4>";
                     exit;
+                }
+                $arquivo = "../../xml/" . $chave;
+                if (file_exists($arquivo)) {
+                    $arquivo = $arquivo;
+                    $xml = simplexml_load_file($arquivo);
+                    // imprime os atributos do objeto criado
+
+                    if (empty($xml->protNFe->infProt->nProt)) {
+                        echo "<h1>ACESSO NEGADO ARQUIVO CT-e ... ADICIONE UM ARQUIVO NF-e!</h1>";
+
+                        exit;
+                    }
+
+                    //NOTAFISCAL// 
+
+                    $chave = $xml->NFe->infNFe->attributes()->Id;
+                    $chave = strtr(strtoupper($chave), array("NFE" => NULL));
+                    $cUF = $xml->NFe->infNFe->ide->cUF;
+                    $cNF = $xml->NFe->infNFe->ide->cNF;
+                    $natOp = $xml->NFe->infNFe->ide->natOp;
+                    $indPag = $xml->NFe->infNFe->ide->indPag;
+                    $mod = $xml->NFe->infNFe->ide->mod;
+                    $serie = $xml->NFe->infNFe->ide->serie;
+                    $nNF =  $xml->NFe->infNFe->ide->nNF;
+                    $tpNF = $xml->NFe->infNFe->ide->tpNF;
+                    $cMunFG = $xml->NFe->infNFe->ide->cMunFG;
+                    $tpImp = $xml->NFe->infNFe->ide->tpImp;
+                    $tpEmis = $xml->NFe->infNFe->ide->tpEmis;
+                    $cDV = $xml->NFe->infNFe->ide->cDV;
+                    $tpAmb = $xml->NFe->infNFe->ide->tpAmb;
+                    $vBC = $xml->NFe->infNFe->total->ICMSTot->vBC;
+                    $vBC = number_format((float) $vBC, 2, ",", ".");
+                    $vICMS = $xml->NFe->infNFe->total->ICMSTot->vICMS;
+                    $vICMS = number_format((float) $vICMS, 2, ",", ".");
+                    $vBCST = $xml->NFe->infNFe->total->ICMSTot->vBCST;
+                    $vBCST = number_format((float) $vBCST, 2, ",", ".");
+                    $vST = $xml->NFe->infNFe->total->ICMSTot->vST;
+                    $vST = number_format((float) $vST, 2, ",", ".");
+                    $vProd = $xml->NFe->infNFe->total->ICMSTot->vProd;
+                    $vProd = number_format((float) $vProd, 2, ",", ".");
+                    $vNF = $xml->NFe->infNFe->total->ICMSTot->vNF;
+                    $vNF = number_format((float) $vNF, 2, ",", ".");
+                    $vFrete = number_format((float) $xml->NFe->infNFe->total->ICMSTot->vFrete, 2, ",", ".");
+                    $vSeg = number_format((float)   $xml->NFe->infNFe->total->ICMSTot->vSeg, 2, ",", ".");
+                    $vDesc = number_format((float) $xml->NFe->infNFe->total->ICMSTot->vDesc, 2, ",", ".");
+                    $vIPI = number_format((float) $xml->NFe->infNFe->total->ICMSTot->vIPI, 2, ",", ".");
+
+                    //EMISSOR //
+
+                    $emit_CNPJ = $xml->NFe->infNFe->emit->CNPJ;
+                    $emit_xNome = $xml->NFe->infNFe->emit->xNome;
+                    $emit_xFant = $xml->NFe->infNFe->emit->xFant;
+                    $emit_xLgr = $xml->NFe->infNFe->emit->enderEmit->xLgr;
+                    $emit_nro = $xml->NFe->infNFe->emit->enderEmit->nro;
+                    $emit_xBairro = $xml->NFe->infNFe->emit->enderEmit->xBairro;
+                    $emit_cMun = $xml->NFe->infNFe->emit->enderEmit->cMun;
+                    $emit_xMun = $xml->NFe->infNFe->emit->enderEmit->xMun;
+                    $emit_UF = $xml->NFe->infNFe->emit->enderEmit->UF;
+                    $emit_CEP = $xml->NFe->infNFe->emit->enderEmit->CEP;
+                    $emit_cPais = $xml->NFe->infNFe->emit->enderEmit->cPais;
+                    $emit_xPais = $xml->NFe->infNFe->emit->enderEmit->xPais;
+                    $emit_fone = $xml->NFe->infNFe->emit->enderEmit->fone;
+                    $emit_IE = $xml->NFe->infNFe->emit->IE;
+                    $emit_IM = $xml->NFe->infNFe->emit->IM;
+                    $emit_CNAE = $xml->NFe->infNFe->emit->CNAE;
+
+                    //DESTINATÁRIO//
+
+                    $dest_xNome = $xml->NFe->infNFe->dest->xNome;
+                    $dest_xLgr = $xml->NFe->infNFe->dest->enderDest->xLgr;
+                    $dest_nro =  $xml->NFe->infNFe->dest->enderDest->nro;
+
+                    $dest_cpf =  $xml->NFe->infNFe->dest->CPF;
+
+                    if ($dest_cpf  != "") {
+
+                        $dest_cpf =  $xml->NFe->infNFe->dest->CPF;
+                    } else {
+                        $dest_cpf = "";
+                    }
+
+                    $dest_xBairro = $xml->NFe->infNFe->dest->enderDest->xBairro;
+                    $dest_cMun = $xml->NFe->infNFe->dest->enderDest->cMun;
+                    $dest_xMun = $xml->NFe->infNFe->dest->enderDest->xMun;
+                    $dest_UF = $xml->NFe->infNFe->dest->enderDest->UF;
+                    $dest_CEP = $xml->NFe->infNFe->dest->enderDest->CEP;
+                    $dest_cPais = $xml->NFe->infNFe->dest->enderDest->cPais;
+                    $dest_xPais = $xml->NFe->infNFe->dest->enderDest->xPais;
+                    $dest_xTelefonw = $xml->NFe->infNFe->dest->enderDest->fone;
+                    $dest_email = $xml->NFe->infNFe->dest->email;
+                    $dest_IE = $xml->NFe->infNFe->dest->IE;
+
+                    // PRODUTOS //
+
+                    $finNFe  = $xml->NFe->infNFe->ide->finNFe;
+                    $procEmi = $xml->NFe->infNFe->ide->procEmi;
+                    $verProc = $xml->NFe->infNFe->ide->verProc;
+                    $xMotivo = $xml->protNFe->infProt->xMotivo;
+                    $nProt   = $xml->protNFe->infProt->nProt;
+                }
+
+                if (isset($chave)) {
+
+                    $item = new NotaFiscal;
+                    $item->valoricms            = $vICMS;
+                    $item->data                 = $data;
+                    $item->chave                = $chave;
+                    $item->autorizacao          = $nProt;
+                    $item->notafiscal           = $nNF;
+                    $item->serie                = $serie;
+                    $item->cnpj                 = $emit_CNPJ;
+                    $item->receber_id           = $receb_id;
+                    if ($emit_xFant != "") {
+                        $item->razaosocial = $emit_xFant;
+                    } else {
+                        $item->razaosocial = $emit_xNome;
+                    }
+                    $item->inscricaoestadual    = $emit_IE;
+                    $item->bcicms               = $vBCST;
+                    $item->totalproduto         = $vProd;
+                    $item->frete                = $vFrete;
+                    $item->desconto             = $vFrete;
+                    $item->totalipi             = $vIPI;
+                    $item->totalnota            = $vNF;
+                    $item->usuarios_id          = $usuario_id;
+
+                    $item->cadastar();
+
+                    $notaID = $item->id;
+                }
+
+                if ($dest_cpf != "") {
+                    $consultor = Destinatario::getIDCpf('*', 'destinatario', "'%" . $dest_cpf . "%'", null, null, null);
+                } else {
+                    $consultor = false;
+                }
+
+                if ($consultor != false) {
+
+                    $dest = new Destinatario;
+                    $dest->cpf            = $consultor->cpf;
+                    $dest->nome           = $consultor->nome;
+                    $dest->logradouro     = $consultor->logradouro;
+                    $dest->numero         = $consultor->numero;
+                    $dest->bairro         = $consultor->bairro;
+                    $dest->municipio      = $consultor->municipio;
+                    $dest->uf             = $consultor->uf;
+                    $dest->cep            = $consultor->cep;
+                    $dest->pais           = $consultor->pais;
+                    $dest->telefone       = $consultor->telefone;
+                    $dest->telefone2      = $consultor->telefone2;
+                    $dest->email          = $consultor->email;
+                    $dest->flag           = $consultor->flag;
+                    $dest->complemento    = $consultor->complemento;
+                    $dest->notafiscal_id  = $notaID;
+                    $dest->cadastar();
+
+                    $destID = $dest->id;
+                } else {
+                    $dest = new Destinatario;
+                    $dest->cpf            = $dest_cpf;
+                    $dest->nome           = $dest_xNome;
+                    $dest->logradouro     = $dest_xLgr;
+                    $dest->numero         = $dest_nro;
+                    $dest->bairro         = $dest_xBairro;
+                    $dest->municipio      = $dest_xMun;
+                    $dest->uf             = $dest_UF;
+                    $dest->cep            = $dest_CEP;
+                    $dest->pais           = $dest_xPais;
+                    $dest->telefone       = $dest_xTelefonw;
+                    $dest->email          = $dest_email;
+                    $dest->notafiscal_id  = $notaID;
+                    $dest->cadastar();
+
+                    $destID = $dest->id;
                 }
 
 
-                $chave = $xml->NFe->infNFe->attributes()->Id;
-                $chave = strtr(strtoupper($chave), array("NFE" => NULL));
-                $cUF = $xml->NFe->infNFe->ide->cUF;
-                $cNF = $xml->NFe->infNFe->ide->cNF;
-                $natOp = $xml->NFe->infNFe->ide->natOp;
-                $indPag = $xml->NFe->infNFe->ide->indPag;
-                $mod = $xml->NFe->infNFe->ide->mod;
-                $serie = $xml->NFe->infNFe->ide->serie;
-                $nNF =  $xml->NFe->infNFe->ide->nNF;
-                //$dEmi = $xml->NFe->infNFe->ide->dEmi;  
-                //$dEmi = explode('-', $dEmi);
-                //$dEmi = $dEmi[2]."/".$dEmi[1]."/".$dEmi[0];
-                //$dSaiEnt = $xml->NFe->infNFe->ide->dSaiEnt; 
-                //$dSaiEnt = explode('-', $dSaiEnt);
-                //$dSaiEnt = $dSaiEnt[2]."/".$dSaiEnt[1]."/"
-                $tpNF = $xml->NFe->infNFe->ide->tpNF;
-                $cMunFG = $xml->NFe->infNFe->ide->cMunFG;
-                $tpImp = $xml->NFe->infNFe->ide->tpImp;
-                $tpEmis = $xml->NFe->infNFe->ide->tpEmis;
-                $cDV = $xml->NFe->infNFe->ide->cDV;
-                $tpAmb = $xml->NFe->infNFe->ide->tpAmb;
+                $control = new ControlEnvio;
+                $control->data               = $data;
+                $control->notafiscal         = $nNF;
+                $control->serie              = $serie;
+                $control->consultora         = $dest_xNome;
+                $control->status             = 1;
+                $control->notafiscal_id      = $notaID;
+                $control->destinatario_id    = $destID;
+                $control->ocorrencias_id     = 29;
+                $control->entregadores_id    = 195;
 
-                $emit_CPF = $xml->NFe->infNFe->emit->CPF;
-                $emit_CNPJ = $xml->NFe->infNFe->emit->CNPJ;
-                $emit_xNome = $xml->NFe->infNFe->emit->xNome;
-                $emit_xFant = $xml->NFe->infNFe->emit->xFant;
-                //<enderEmit>
-                $emit_xLgr = $xml->NFe->infNFe->emit->enderEmit->xLgr;
-                $emit_nro = $xml->NFe->infNFe->emit->enderEmit->nro;
-                $emit_xBairro = $xml->NFe->infNFe->emit->enderEmit->xBairro;
-                $emit_cMun = $xml->NFe->infNFe->emit->enderEmit->cMun;
-                $emit_xMun = $xml->NFe->infNFe->emit->enderEmit->xMun;
-                $emit_UF = $xml->NFe->infNFe->emit->enderEmit->UF;
-                $emit_CEP = $xml->NFe->infNFe->emit->enderEmit->CEP;
-                $emit_cPais = $xml->NFe->infNFe->emit->enderEmit->cPais;
-                $emit_xPais = $xml->NFe->infNFe->emit->enderEmit->xPais;
-                $emit_fone = $xml->NFe->infNFe->emit->enderEmit->fone;
-                //</enderEmit>
-                $emit_IE = $xml->NFe->infNFe->emit->IE;
-                $emit_IM = $xml->NFe->infNFe->emit->IM;
-                $emit_CNAE = $xml->NFe->infNFe->emit->CNAE;
+                $control->cadastar();
 
-                $dest_cnpj =  $xml->NFe->infNFe->dest->CNPJ;
+                $controlID = $control->id;
 
-                $dest_xNome = $xml->NFe->infNFe->dest->xNome;
 
-                $dest_xLgr = $xml->NFe->infNFe->dest->enderDest->xLgr;
-                $dest_nro =  $xml->NFe->infNFe->dest->enderDest->nro;
-                $dest_xBairro = $xml->NFe->infNFe->dest->enderDest->xBairro;
-                $dest_cMun = $xml->NFe->infNFe->dest->enderDest->cMun;
-                $dest_xMun = $xml->NFe->infNFe->dest->enderDest->xMun;
-                $dest_UF = $xml->NFe->infNFe->dest->enderDest->UF;
-                $dest_CEP = $xml->NFe->infNFe->dest->enderDest->CEP;
-                $dest_cPais = $xml->NFe->infNFe->dest->enderDest->cPais;
-                $dest_xPais = $xml->NFe->infNFe->dest->enderDest->xPais;
+                if (isset($xml->NFe->infNFe->det) != "") {
 
-                $dest_IE = $xml->NFe->infNFe->dest->IE;
+                    $listar = $xml->NFe->infNFe->det;
 
-                $vBC = $xml->NFe->infNFe->total->ICMSTot->vBC;
-                $vBC = number_format((float) $vBC, 2, ",", ".");
-                $vICMS = $xml->NFe->infNFe->total->ICMSTot->vICMS;
-                $vICMS = number_format((float) $vICMS, 2, ",", ".");
-                $vBCST = $xml->NFe->infNFe->total->ICMSTot->vBCST;
-                $vBCST = number_format((float) $vBCST, 2, ",", ".");
-                $vST = $xml->NFe->infNFe->total->ICMSTot->vST;
-                $vST = number_format((float) $vST, 2, ",", ".");
-                $vProd = $xml->NFe->infNFe->total->ICMSTot->vProd;
-                $vProd = number_format((float) $vProd, 2, ",", ".");
-                $vNF = $xml->NFe->infNFe->total->ICMSTot->vNF;
-                $vNF = number_format((float) $vNF, 2, ",", ".");
-                $vFrete = number_format((float) $xml->NFe->infNFe->total->ICMSTot->vFrete, 2, ",", ".");
-                $vSeg = number_format((float)   $xml->NFe->infNFe->total->ICMSTot->vSeg, 2, ",", ".");
-                $vDesc = number_format((float) $xml->NFe->infNFe->total->ICMSTot->vDesc, 2, ",", ".");
-                $vIPI = number_format((float) $xml->NFe->infNFe->total->ICMSTot->vIPI, 2, ",", ".");
+                    if (isset($listar) != "") {
+
+                        foreach ($listar as $item) {
+                            $contador += 1;
+
+                            $codigo       = strval($item->prod->cProd);
+                            $xProd        = strval($item->prod->xProd);
+                            $NCM          = strval($item->prod->NCM);
+                            $CFOP         = strval($item->prod->CFOP);
+                            $uCom         = strval($item->prod->uCom);
+                            $qCom         = strval($item->prod->qCom);
+                            $qCom         = number_format((float) $qCom, 2, ",", ".");
+                            $vUnCom       = strval($item->prod->vUnCom);
+                            $vUnCom       = number_format((float) $vUnCom, 2, ",", ".");
+                            $vProd        = strval($item->prod->vProd);
+                            $vProd        = number_format((float) $vProd, 2, ",", ".");
+                            $vBC_item     = $item->imposto->ICMS->ICMS00->vBC;
+                            $icms00       = $item->imposto->ICMS->ICMS00;
+                            $icms10       = $item->imposto->ICMS->ICMS10;
+                            $icms20       = $item->imposto->ICMS->ICMS20;
+                            $icms30       = $item->imposto->ICMS->ICMS30;
+                            $icms40       = $item->imposto->ICMS->ICMS40;
+                            $icms50       = $item->imposto->ICMS->ICMS50;
+                            $icms51       = $item->imposto->ICMS->ICMS51;
+                            $icms60       = $item->imposto->ICMS->ICMS60;
+                            $ICMSSN102    = $item->imposto->ICMS->ICMSSN102;
+
+                            $itemproduto = new Produto;
+                            $itemproduto->data              = $data;
+                            $itemproduto->codigo            = $codigo;
+                            $itemproduto->nome              = $xProd;
+                            $itemproduto->ncm               = $NCM;
+                            $itemproduto->cfop              = $CFOP;
+                            $itemproduto->un                = $vUnCom;
+                            $itemproduto->qtd               = $qCom;
+                            $itemproduto->valor_uni         = $uCom;
+                            $itemproduto->bc_icms           = 0;
+                            $itemproduto->valor_prod        = $vProd;
+                            $itemproduto->valor_icms        = 0;
+                            $itemproduto->valor_ipi         = 0;
+                            $itemproduto->ipi               = 0;
+                            $itemproduto->icms              = 0;
+                            $itemproduto->categorias_id     = 1;
+                            $itemproduto->notafiscal_id     = $notaID;
+                            $itemproduto->destinatario_id   = $destID;
+
+                            $itemproduto->cadastar();
+                        }
+                    }
+                }
             }
-
-            if ($tpAmb != 1) {
-                echo "<h4>Documento emitido em ambiente de homologado!</h4>";
-                exit;
-            }
-            $finNFe  = $xml->NFe->infNFe->ide->finNFe;
-            $procEmi = $xml->NFe->infNFe->ide->procEmi;
-            $verProc = $xml->NFe->infNFe->ide->verProc;
-
-            $xMotivo = $xml->protNFe->infProt->xMotivo;
-            $nProt   = $xml->protNFe->infProt->nProt;
         }
     }
+
+
+    $addreceber = Receber::getID('*', 'receber', $receb_id, null, null, null);
+    $addreceber->qtd           =  $i;
+    $addreceber->disponivel    =  $i;
+    $addreceber->atualizar();
+
+
+
+    header('location: xml-list.php');
+
+    exit;
 }
 
 include __DIR__ . '../../../includes/layout/header.php';

@@ -8,7 +8,6 @@ use App\Entidy\Gaiola;
 use App\Entidy\Receber;
 use App\Entidy\Regiao;
 use App\Entidy\Setor;
-use App\Entidy\UserCli;
 use App\Session\Login;
 
 Login::requireLogin();
