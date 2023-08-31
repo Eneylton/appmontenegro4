@@ -70,7 +70,7 @@ class CalcularQtd
     public static function getMudarEntregador($receber, $entreNovo)
     {
     
-        $qtdEntrega = EntregadorQtd ::getIDReceber('*','entregador_qtd',$receber,null,null.null);
+        $qtdEntrega = EntregadorQtd ::getIDReceber('*','entregador_qtd',$receber,null,null,null);
 
         $entregadorId = $qtdEntrega->entregadores_id;
 

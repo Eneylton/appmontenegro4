@@ -8,7 +8,7 @@ use \PDO;
 
 class UserCli
 {
-    
+
     public $id;
     public $usuarios_id;
     public $clientes_id;
@@ -63,6 +63,13 @@ class UserCli
             ->fetchObject(self::class);
     }
 
+    public static function getIDCliUser($fields, $table, $where, $order, $limit)
+    {
+        return (new Database('user_cli'))->select($fields, $table, 'uc.usuarios_id  = ' . $where, $order, $limit)
+            ->fetchObject(self::class);
+    }
+
+
     public static function getIDUserCli($fields, $table, $where, $order, $limit)
     {
         return (new Database('user_cli'))->select($fields, $table, 'usuarios_id = ' . $where, $order, $limit)
@@ -73,7 +80,13 @@ class UserCli
     public static function getIDCli($fields, $table, $where, $order, $limit)
     {
         return (new Database('user_cli'))->select($fields, $table, 'usuarios_id = ' . $where, $order, $limit)
-        ->fetchAll(PDO::FETCH_CLASS, self::class);
+            ->fetchAll(PDO::FETCH_CLASS, self::class);
+    }
+
+    public static function getClientesID($fields, $table, $where, $order, $limit)
+    {
+        return (new Database('user_cli'))->select($fields, $table, 'usuarios_id = ' . $where, $order, $limit)
+            ->fetchObject(self::class);
     }
 
 

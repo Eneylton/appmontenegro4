@@ -1,5 +1,7 @@
 <?php
 
+use App\Funcao\CalcularQtd;
+
 $list = '';
 $ocultar = '';
 $nome = '';
@@ -148,118 +150,130 @@ foreach ($listar as $item) {
         $data_vencimento = $data_final * -1;
     }
 
-    switch ($data_final) {
 
-        case '-16':
-            $cor = "badge-danger";
-            $dia = "Já se passaram + de 15 dias do venci...";
-            break;
 
-        case '-15':
-            $cor = "badge-danger";
-            $dia = "Já se passaram 15 dias do venci...";
-            break;
-        case '-14':
-            $cor = "badge-danger";
-            $dia = "Já se passaram 14 dias do venci...";
-            break;
-        case '-13':
-            $cor = "badge-danger";
-            $dia = "Já se passaram 13 dias do venci...";
-            break;
-        case '-12':
-            $cor = "badge-danger";
-            $dia = "Já se passaram 12 dias do venci...";
-            break;
-        case '-11':
-            $cor = "badge-danger";
-            $dia = "Já se passaram 11 dias do venci...";
-            break;
-        case '-10':
-            $cor = "badge-danger";
-            $dia = "Já se passaram 10 dias do venci...";
-            break;
-        case '-9':
-            $cor = "badge-danger";
-            $dia = "Já se passaram 9 dias do venci...";
-            break;
-        case '-8':
-            $cor = "badge-danger";
-            $dia = "Já se passaram 8 dias do venci...";
-            break;
-        case '-7':
-            $cor = "badge-danger";
-            $dia = "Já se passaram 7 dias do venci...";
-            break;
-        case '-6':
-            $cor = "badge-danger";
-            $dia = "Já se passaram 6 dias do venci...";
-            break;
-        case '-5':
-            $cor = "badge-danger";
-            $dia = "Já se passaram 5 dias do venci...";
-            break;
-        case '-4':
-            $cor = "badge-danger";
-            $dia = "Já se passaram 4 dias do venci...";
-            break;
-        case '-3':
-            $cor = "badge-danger";
-            $dia = "Já se passaram 3 dias do venci...";
-            break;
+    $limitQtd = CalcularQtd::getQtdLimit($item->id);
 
-        case '-2':
-            $cor = "badge-danger";
-            $dia = "Já se passaram 2 dias do venci...";
-            break;
+    if ($limitQtd != null) {
 
-        case '-1':
-            $cor = "badge-danger";
-            $dia = "Já se passou 1 dia do prazo de venci...";
-            break;
+        if ($limitQtd > 0) {
 
-        case '0':
-            $cor = "badge-dark";
-            $dia = "Dia da Entrega...";
-            break;
+            switch ($data_final) {
 
-        case '1':
-            $cor = "badge-danger";
-            $dia = "Falta apenas 1 dia para o vencimento...";
-            break;
+                case '-16':
+                    $cor = "badge-danger";
+                    $dia = "Já se passaram + de 15 dias do venci...";
+                    break;
 
-        case '2':
-            $cor = "badge-primary";
-            $dia = "Faltam apenas 2 dias para o vencimento...";
-            break;
+                case '-15':
+                    $cor = "badge-danger";
+                    $dia = "Já se passaram 15 dias do venci...";
+                    break;
+                case '-14':
+                    $cor = "badge-danger";
+                    $dia = "Já se passaram 14 dias do venci...";
+                    break;
+                case '-13':
+                    $cor = "badge-danger";
+                    $dia = "Já se passaram 13 dias do venci...";
+                    break;
+                case '-12':
+                    $cor = "badge-danger";
+                    $dia = "Já se passaram 12 dias do venci...";
+                    break;
+                case '-11':
+                    $cor = "badge-danger";
+                    $dia = "Já se passaram 11 dias do venci...";
+                    break;
+                case '-10':
+                    $cor = "badge-danger";
+                    $dia = "Já se passaram 10 dias do venci...";
+                    break;
+                case '-9':
+                    $cor = "badge-danger";
+                    $dia = "Já se passaram 9 dias do venci...";
+                    break;
+                case '-8':
+                    $cor = "badge-danger";
+                    $dia = "Já se passaram 8 dias do venci...";
+                    break;
+                case '->7':
+                    $cor = "badge-danger";
+                    $dia = "Já se passaram 7 dias do venci...";
+                    break;
+                case '-6':
+                    $cor = "badge-danger";
+                    $dia = "Já se passaram 6 dias do venci...";
+                    break;
+                case '-5':
+                    $cor = "badge-danger";
+                    $dia = "Já se passaram 5 dias do venci...";
+                    break;
+                case '-4':
+                    $cor = "badge-danger";
+                    $dia = "Já se passaram 4 dias do venci...";
+                    break;
+                case '-3':
+                    $cor = "badge-danger";
+                    $dia = "Já se passaram 3 dias do venci...";
+                    break;
 
-        case '3':
-            $cor = "badge-secondary";
-            $dia = "Faltam apenas 3 dias para o vencimento...";
-            break;
+                case '-2':
+                    $cor = "badge-danger";
+                    $dia = "Já se passaram 2 dias do venci...";
+                    break;
 
-        case '4':
-            $cor = "badge-info";
-            $dia = "Faltam apenas 4 dias para o vencimento...";
-            break;
+                case '-1':
+                    $cor = "badge-danger";
+                    $dia = "Já se passou 1 dia do prazo de venci...";
+                    break;
 
-        case '5':
-            $cor = "badge-primary";
-            $dia = "Faltam apenas 5 dias para o vencimento...";
-            break;
+                case '0':
+                    $cor = "badge-success";
+                    $dia = "Dia da Entrega...";
+                    break;
 
-        default:
-            $cor = "badge-dark";
-            $dia = "SEM PREVISÃO !!!!";
-            break;
+                case '1':
+                    $cor = "badge-danger";
+                    $dia = "Falta apenas 1 dia para o vencimento...";
+                    break;
+
+                case '2':
+                    $cor = "badge-primary";
+                    $dia = "Faltam apenas 2 dias para o vencimento...";
+                    break;
+
+                case '3':
+                    $cor = "badge-secondary";
+                    $dia = "Faltam apenas 3 dias para o vencimento...";
+                    break;
+
+                case '4':
+                    $cor = "badge-info";
+                    $dia = "Faltam apenas 4 dias para o vencimento...";
+                    break;
+
+                case '5':
+                    $cor = "badge-primary";
+                    $dia = "Faltam apenas 5 dias para o vencimento...";
+                    break;
+
+                default:
+                    $cor = "badge-dark";
+                    $dia = "SEM PREVISÃO !!!!";
+                    break;
+            }
+        } else {
+
+            $cor = "badge-success";
+            $dia = "Concluido...";
+        }
+    } else {
+
+        $cor = "badge-dark";
+        $dia = "SEM PREVISÃO !!!!";
     }
 
-    $flag = intval($item->disponivel);
-
-    if ($flag == 0) {
-        $cor = "badge-success";
-        $dia = "Concluido...";
-    }
 
     if ($item->coleta == null) {
 

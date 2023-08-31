@@ -7,6 +7,7 @@ use App\Entidy\Destinatario;
 use App\Entidy\NotaFiscal;
 use App\Entidy\Produto;
 use App\Entidy\Receber;
+use App\Entidy\UserCli;
 use App\File\Upload;
 use App\Session\Login;
 
@@ -20,8 +21,20 @@ $codigoCpF = bin2hex($restultado_bytes1);
 
 $usuariologado = Login::getUsuarioLogado();
 
+$acesso = $usuariologado['acessos_id'];
+
 $usuario_id = $usuarios_id = $usuariologado['id'];
 $usuario    = $usuarios_id = $usuariologado['nome'];
+
+
+$cliuser = UserCli::getIDCliUser('uc.id as id,c.id as cli_id,c.nome as nome', 'user_cli AS uc
+INNER JOIN
+clientes AS c ON (c.id = uc.clientes_id) ', "'" . $usuario_id . "'", null, null, null);
+
+if ($cliuser != false) {
+    $cli_nome = $cliuser->nome;
+    $cli_id = $cliuser->cli_id;
+}
 
 $contador = 0;
 $i = 0;
@@ -106,7 +119,7 @@ if (isset($_FILES['arquivo'])) {
     $receber->qtd           =  $i;
     $receber->disponivel    =  $i;
     $receber->numero        =  "RM-" . $codigo;
-    $receber->clientes_id   =  25;
+    $receber->clientes_id   =  $cli_id;
     $receber->gaiolas_id    =  117;
     $receber->usuarios_id   =  $usuario_id;
     $receber->servicos_id   =  7;
