@@ -27,7 +27,7 @@ $value = Receber::getID('*', 'receber', $_GET['id'], null, null);
 
 $listBoletos = Boleto::getBoletosListID('*', 'boletos', $_GET['id'], null, null, null);
 
-if ($listBoletos != "") {
+if (!empty($listBoletos)) {
 
     foreach ($listBoletos as $item) {
         $boletos = Boleto::getID('*', 'boletos', $item->id, null, null, null);
@@ -46,7 +46,7 @@ if ($listBoletos != "") {
 
     $notafiscal = NotaFiscal::getIDNotaFiscal('*', 'notafiscal',"'". $_GET['id']."'", null, null, null);
     
-    if($notafiscal != ""){
+    if(!empty($notafiscal)){
         foreach ($notafiscal as $res) {
 
             $cod = NotaFiscal::getID('*','notafiscal',$res->id,null,null,null);

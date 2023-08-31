@@ -20,6 +20,8 @@ $value = Boleto::getID('*', 'boletos', $param, null, null, null);
 
 $entregador_id = $value->entregadores_id;
 $destinatario_id = $value->destinatario_id;
+$receber_qtd = $value->receber_id;
+$entregadores_qtd = $value->entregadores_id;
 
 $dest = Boleto::getID('*', 'destinatario', $destinatario_id, null, null, null);
 
@@ -66,6 +68,8 @@ $dados .= '<div class="row">
                <input type="hidden" name="id" value="' . $id . '">
                <input type="hidden" name="receber_id" value="' . $receber_id . '">
                <input type="hidden" name="codigo" value="' . $codigo . '">
+               <input type="hidden" name="rcb_qtd" value="' . $receber_qtd . '">
+               <input type="hidden" name="ent_qtd" value="' . $entregadores_qtd . '">
                <input type="hidden" name="destinatario" value="' . $dest_nome . '">
                <label>Data</label>
                <input style="text-transform:uppercase" type="datetime-local" class="form-control" name="data" value="' . $data . '">

@@ -90,6 +90,13 @@ class EntregadorQtd
         return (new Database('entregador_qtd'))->select($fields, $table, 'receber_id = ' . $where, $order, $limit)
             ->fetchObject(self::class);
     }
+    
+    public static function getIDReceberEntregador($fields, $table, $where, $order, $limit)
+    {
+        return (new Database('entregador_qtd'))->select($fields, $table, 'entregadores_id = ' . $where, $order, $limit)
+            ->fetchObject(self::class);
+    }
+
 
     public static function getIDQtd($fields = null, $table = null, $where = null, $order = null, $limit = null)
     {

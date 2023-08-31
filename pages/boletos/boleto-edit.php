@@ -8,6 +8,7 @@ use App\Entidy\Devolucao;
 use App\Entidy\Entrega;
 use App\Entidy\EntregaDevolucao;
 use App\Entidy\EntregadorDetalhe;
+use App\Entidy\EntregadorQtd;
 use App\Entidy\Producao;
 use App\Funcao\CalcularQtd;
 use App\Session\Login;
@@ -38,54 +39,258 @@ if (!isset($_GET['id']) or !is_numeric($_GET['id'])) {
     switch ($_GET['status']) {
         case '3':
 
-            $value = Boleto::getID('*', 'boletos', $_GET['id'], null, null, null);
-            $value->data             = $data_cadastra;
-            $value->status           = 3;
-            $value->obs              = $_GET['obs'];
-            $value->atualizar();
+            $entregNovo = CalcularQtd::getMudarEntregador($_GET['receber_id'],$_GET['entregador_id']);
 
-            $detalhe = new EntregadorDetalhe;
-            $detalhe->data             = $data_cadastra;
-            $detalhe->status           = 5;
-            $detalhe->ocorrencias_id   = 29;
-            $detalhe->obs              = $_GET['obs'];
-            $detalhe->entregadores_id  = $_GET['entregador_id'];
-            $detalhe->boletos_id       = $_GET['id'];
-            $detalhe->usuarios_id      = $usuario;
-            $detalhe->cadastar();
+            if($entregNovo == true){
+
+                $qtdEntrega = EntregadorQtd ::getRecebID('*','entregador_qtd',$_GET['rcb_qtd'].
+                ' AND entregadores_id='.$_GET['ent_qtd'],null,null.null);
+
+                $entid = $qtdEntrega->id;
+                $dataInicio = $qtdEntrega->data_ini;
+                $vencimento = $qtdEntrega->vencimento;
+                $entregadorId = $qtdEntrega->entregadores_id;
+                $entregadorqtd = $qtdEntrega->qtd;
+                $qtdEntrega->qtd = $entregadorqtd - 1;
+                $qtdEntrega->atualizar();
+
+                $qtdEntregatual = EntregadorQtd ::getRecebID('*','entregador_qtd',$_GET['receber_id'].
+                ' AND entregadores_id='.$_GET['entregador_id'],null,null.null);
+
+                if($qtdEntregatual != false){
+                    $entid = $qtdEntregatual->id;
+                    $dataInicio = $qtdEntregatual->data_ini;
+                    $vencimento = $qtdEntregatual->vencimento;
+                    $entregadorId = $qtdEntregatual->entregadores_id;
+                    $entreqtd = $qtdEntregatual->qtd;
+                    $qtdEntregatual->qtd = intval($entreqtd) + 1;
+                    $qtdEntrega->atualizar();
+                }else{
+                    $entregador = new EntregadorQtd;
+                    $entregador->data_ini            = $dataInicio;
+                    $entregador->vencimento          = $vencimento;
+                    $entregador->qtd                 = 1;
+                    $entregador->entregadores_id     = $_GET['entregador_id'];
+                    $entregador->receber_id          = $_GET['receber_id'];
+                    $entregador->cadastar();
+                }
+
+               
+                $boletos = Boleto::getBoletosID('*','boletos',$_GET['rcb_qtd'].' AND entregadores_id='.$_GET['ent_qtd'], null,null,null);
+                $boletos->entregadores_id  = $_GET['entregador_id'];
+                $boletos->status           = $_GET['status'];
+                if($_GET['ocorrencias_id'] != 18){
+
+                    $boletos->ocorrencias_id   = $_GET['ocorrencias_id'];
+                }else{
+                    $boletos->ocorrencias_id   = 18;
+                }
+                $boletos->obs              = $_GET['obs'];
+                $boletos->atualizar(); 
+
+                $detalhe = new EntregadorDetalhe;
+                $detalhe->data             = $data_cadastra;
+                $detalhe->status           = $_GET['status'];
+                $detalhe->ocorrencias_id   = 29;
+                $detalhe->obs              = $_GET['obs'];
+                $detalhe->entregadores_id  = $_GET['entregador_id'];
+                $detalhe->boletos_id       = $_GET['id'];
+                $detalhe->usuarios_id      = $usuario;
+                $detalhe->cadastar();
+
+                header('location: boleto-list.php?id_item=' . $_GET['receber_id']);
+                exit;
+
+
+            }else{
+                
+                $qtdEntrega = EntregadorQtd ::getRecebID('*','entregador_qtd',$_GET['rcb_qtd'].
+                ' AND entregadores_id='.$_GET['ent_qtd'],null,null.null);
+
+                $entid = $qtdEntrega->id;
+                $dataInicio = $qtdEntrega->data_ini;
+                $vencimento = $qtdEntrega->vencimento;
+                $entregadorId = $qtdEntrega->entregadores_id;
+                $entregadorqtd = $qtdEntrega->qtd;
+                $qtdEntrega->qtd = $entregadorqtd - 1;
+                $qtdEntrega->atualizar();
+
+                $qtdEntregatual = EntregadorQtd ::getRecebID('*','entregador_qtd',$_GET['receber_id'].
+                ' AND entregadores_id='.$_GET['entregador_id'],null,null.null);
+
+                $qtd = $qtdEntregatual->qtd;
+                $qtdEntregatual->qtd = intval($qtd) + 1;
+                $qtdEntregatual->atualizar();
+
+                $boletos = Boleto::getBoletosID('*','boletos',$_GET['rcb_qtd'].' AND entregadores_id='.$_GET['ent_qtd'], null,null,null);
+                $boletos->entregadores_id  = $_GET['entregador_id'];
+                $boletos->status           = $_GET['status'];
+                if($_GET['ocorrencias_id'] != 18){
+
+                    $boletos->ocorrencias_id   = $_GET['ocorrencias_id'];
+
+                }else{
+                    
+                    $boletos->ocorrencias_id   = 18;
+                }
+                $boletos->obs              = $_GET['obs'];
+                $boletos->atualizar(); 
+
+                $detalhe = new EntregadorDetalhe;
+                $detalhe->data             = $data_cadastra;
+                $detalhe->status           = $_GET['status'];
+                if($_GET['ocorrencias_id'] != 18){
+                    
+                    $detalhe->ocorrencias_id   = $_GET['ocorrencias_id'];
+                }else{
+
+                    $detalhe->ocorrencias_id   = 18;
+                }
+                $detalhe->obs              = $_GET['obs'];
+                $detalhe->entregadores_id  = $_GET['entregador_id'];
+                $detalhe->boletos_id       = $_GET['id'];
+                $detalhe->usuarios_id      = $usuario;
+                $detalhe->cadastar();
+
 
             header('location: boleto-list.php?id_item=' . $_GET['receber_id']);
             exit;
+            }
 
 
         case '4':
 
-            $detalhe = new EntregadorDetalhe;
-            $detalhe->data                = $data_cadastra;
-            $detalhe->status              = 2;
-            $detalhe->ocorrencias_id      = 29;
-            $detalhe->obs                 = $_GET['obs'];
-            $detalhe->entregadores_id     = $_GET['entregador_id'];
-            $detalhe->boletos_id          = $_GET['id'];
-            $detalhe->usuarios_id         = $usuario;
-            $detalhe->cadastar();
+            $entregNovo = CalcularQtd::getMudarEntregador($_GET['receber_id'],$_GET['entregador_id']);
 
-            $value = Boleto::getID('*', 'boletos', $_GET['id'], null, null, null);
-            $value->data             = $data_cadastra;
-            $value->obs              = $_GET['obs'];
-            $value->status           = 4;
-            $value->ocorrencias_id   = 29;
-            $value->atualizar();
+            if($entregNovo == true){
+
+                $qtdEntrega = EntregadorQtd ::getRecebID('*','entregador_qtd',$_GET['rcb_qtd'].
+                ' AND entregadores_id='.$_GET['ent_qtd'],null,null.null);
+
+                $entid = $qtdEntrega->id;
+                $dataInicio = $qtdEntrega->data_ini;
+                $vencimento = $qtdEntrega->vencimento;
+                $entregadorId = $qtdEntrega->entregadores_id;
+                $entregadorqtd = $qtdEntrega->qtd;
+                $qtdEntrega->qtd = $entregadorqtd - 1;
+                $qtdEntrega->atualizar();
+
+                $qtdEntregatual = EntregadorQtd ::getRecebID('*','entregador_qtd',$_GET['receber_id'].
+                ' AND entregadores_id='.$_GET['entregador_id'],null,null.null);
+
+                if($qtdEntregatual != false){
+                    $entid = $qtdEntregatual->id;
+                    $dataInicio = $qtdEntregatual->data_ini;
+                    $vencimento = $qtdEntregatual->vencimento;
+                    $entregadorId = $qtdEntregatual->entregadores_id;
+                    $entreqtd = $qtdEntregatual->qtd;
+                    $qtdEntregatual->qtd = intval($entreqtd) + 1;
+                    $qtdEntrega->atualizar();
+                }else{
+                    $entregador = new EntregadorQtd;
+                    $entregador->data_ini            = $dataInicio;
+                    $entregador->vencimento          = $vencimento;
+                    $entregador->qtd                 = 1;
+                    $entregador->entregadores_id     = $_GET['entregador_id'];
+                    $entregador->receber_id          = $_GET['receber_id'];
+                    $entregador->cadastar();
+                }
+
+               
+                $boletos = Boleto::getBoletosID('*','boletos',$_GET['rcb_qtd'].' AND entregadores_id='.$_GET['ent_qtd'], null,null,null);
+                $boletos->entregadores_id  = $_GET['entregador_id'];
+                $boletos->status           = $_GET['status'];
+                if($_GET['ocorrencias_id'] != 18){
+
+                    $boletos->ocorrencias_id   = $_GET['ocorrencias_id'];
+                }else{
+                    $boletos->ocorrencias_id   = 18;
+                }
+                $boletos->obs              = $_GET['obs'];
+                $boletos->atualizar(); 
+
+                $detalhe = new EntregadorDetalhe;
+                $detalhe->data             = $data_cadastra;
+                $detalhe->status           = $_GET['status'];
+                $detalhe->ocorrencias_id   = 29;
+                $detalhe->obs              = $_GET['obs'];
+                $detalhe->entregadores_id  = $_GET['entregador_id'];
+                $detalhe->boletos_id       = $_GET['id'];
+                $detalhe->usuarios_id      = $usuario;
+                $detalhe->cadastar();
+
+                header('location: boleto-list.php?id_item=' . $_GET['receber_id']);
+                exit;
+
+
+            }else{
+                
+                $qtdEntrega = EntregadorQtd ::getRecebID('*','entregador_qtd',$_GET['rcb_qtd'].
+                ' AND entregadores_id='.$_GET['ent_qtd'],null,null.null);
+
+                $entid = $qtdEntrega->id;
+                $dataInicio = $qtdEntrega->data_ini;
+                $vencimento = $qtdEntrega->vencimento;
+                $entregadorId = $qtdEntrega->entregadores_id;
+                $entregadorqtd = $qtdEntrega->qtd;
+                $qtdEntrega->qtd = $entregadorqtd - 1;
+                $qtdEntrega->atualizar();
+
+                $qtdEntregatual = EntregadorQtd ::getRecebID('*','entregador_qtd',$_GET['receber_id'].
+                ' AND entregadores_id='.$_GET['entregador_id'],null,null.null);
+
+                $qtd = $qtdEntregatual->qtd;
+                $qtdEntregatual->qtd = intval($qtd) + 1;
+                $qtdEntregatual->atualizar();
+
+                $boletos = Boleto::getBoletosID('*','boletos',$_GET['rcb_qtd'].' AND entregadores_id='.$_GET['ent_qtd'], null,null,null);
+                $boletos->entregadores_id  = $_GET['entregador_id'];
+                $boletos->status           = $_GET['status'];
+                if($_GET['ocorrencias_id'] != 18){
+
+                    $boletos->ocorrencias_id   = $_GET['ocorrencias_id'];
+
+                }else{
+
+                    $boletos->ocorrencias_id   = 18;
+                }
+                $boletos->obs              = $_GET['obs'];
+                $boletos->atualizar(); 
+
+                $detalhe = new EntregadorDetalhe;
+                $detalhe->data             = $data_cadastra;
+                $detalhe->status           = $_GET['status'];
+                if($_GET['ocorrencias_id'] != 18){
+                    
+                    $detalhe->ocorrencias_id   = $_GET['ocorrencias_id'];
+                }else{
+
+                    $detalhe->ocorrencias_id   = 18;
+                }
+                $detalhe->obs              = $_GET['obs'];
+                $detalhe->entregadores_id  = $_GET['entregador_id'];
+                $detalhe->boletos_id       = $_GET['id'];
+                $detalhe->usuarios_id      = $usuario;
+                $detalhe->cadastar();
+
 
             header('location: boleto-list.php?id_item=' . $_GET['receber_id']);
             exit;
 
+            }
+           
         case '1':
 
             $detalhe = new EntregadorDetalhe;
             $detalhe->data             = $data_cadastra;
-            $detalhe->status           = 3;
-            $detalhe->ocorrencias_id   = 29;
+            $detalhe->status           = $_GET['status'];
+            if($_GET['ocorrencias_id'] != 18){
+                    
+                $detalhe->ocorrencias_id   = $_GET['ocorrencias_id'];
+            }else{
+
+                $detalhe->ocorrencias_id   = 18;
+            }
             $detalhe->obs              = $_GET['obs'];
             $detalhe->entregadores_id  = $_GET['entregador_id'];
             $detalhe->boletos_id       = $_GET['id'];

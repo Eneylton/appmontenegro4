@@ -5,6 +5,8 @@ namespace App\Funcao;
 use App\Entidy\Boleto;
 use App\Entidy\EntregadorQtd;
 
+$qtd = 0;
+
 class CalcularQtd
 {
     public static function calcularQtd($entregador, $receber, $status)
@@ -62,6 +64,22 @@ class CalcularQtd
             return  '<span class="info-box-icon bg-danger"><i class="fa fa-motorcycle" aria-hidden="true"></i></span>';
         } else {
             return '<span class="info-box-icon bg-success"><i class="fa fa-check"></i></span>';
+        }
+    }
+    
+    public static function getMudarEntregador($receber, $entreNovo)
+    {
+    
+        $qtdEntrega = EntregadorQtd ::getIDReceber('*','entregador_qtd',$receber,null,null.null);
+
+        $entregadorId = $qtdEntrega->entregadores_id;
+
+        if($entregadorId != $entreNovo){
+
+            return true;
+        }else{
+
+            return false;
         }
     }
 }
